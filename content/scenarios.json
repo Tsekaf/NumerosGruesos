@@ -1,0 +1,363 @@
+{
+  "version": 1,
+  "nota": "Los numeros son rangos plausibles, NO datos de mercado verificados. Cada escenario tiene \"verificado\": false hasta que se revisen los valores contra precios/costos reales. La consistencia interna (que la cuenta cierre y el veredicto se derive del criterio) la garantiza tools/validar.html.",
+  "escenarios": [
+    {
+      "id": "margen-soja-001",
+      "categoria": "margen_bruto",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Sembras 60 ha de soja de primera. Rinde esperado: 34 qq/ha. Precio: USD 260/tn. Costos directos (semilla, agroquimicos, labores): USD 420/ha. No hay arrendamiento: el campo es propio.",
+      "datos": {
+        "hectareas": 60,
+        "rinde_qq_ha": 34,
+        "precio_usd_tn": 260,
+        "costos_directos_usd_ha": 420
+      },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "ingreso_ha", "etiqueta": "Ingreso por ha", "expr": "rinde_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen bruto por ha", "expr": "ingreso_ha - costos_directos_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_total", "etiqueta": "Margen total (60 ha)", "expr": "margen_ha * hectareas", "unidad": "USD", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costos_directos_usd_ha * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "El truco es el 0,1: 34 qq/ha son 3,4 tn/ha. A USD 260 la tonelada eso da USD 884/ha de ingreso contra USD 420 de costo. Duplicas el costo directo. Ojo: aca no hay arrendamiento ni flete, que son justo los dos que se comen el margen en un campo alquilado."
+    },
+    {
+      "id": "margen-maiz-002",
+      "categoria": "margen_bruto",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Maiz tardio, rinde 95 qq/ha, precio USD 175/tn. Costos directos: USD 780/ha. El campo esta a 210 km del puerto y el flete te sale USD 32/tn.",
+      "datos": {
+        "rinde_qq_ha": 95,
+        "precio_usd_tn": 175,
+        "costos_directos_usd_ha": 780,
+        "flete_usd_tn": 32
+      },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "ingreso_ha", "etiqueta": "Ingreso por ha", "expr": "rinde_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "flete_ha", "etiqueta": "Flete por ha", "expr": "rinde_qq_ha * 0.1 * flete_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + flete_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen bruto por ha", "expr": "ingreso_ha - costo_ha", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costo_ha * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "El maiz de alto rinde tiene una trampa: el flete se paga por tonelada, asi que rendir mucho tambien cuesta mas. 95 qq/ha son 9,5 tn, y a USD 32/tn el flete son USD 304/ha, casi el 40% de los costos directos. Aun asi el margen aguanta."
+    },
+    {
+      "id": "margen-trigo-003",
+      "categoria": "margen_bruto",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Trigo en campo alquilado. Rinde 39 qq/ha, precio USD 215/tn. Costos directos: USD 560/ha. El arrendamiento se paga en especie: 12 qq de trigo por ha.",
+      "datos": {
+        "rinde_qq_ha": 39,
+        "precio_usd_tn": 215,
+        "costos_directos_usd_ha": 560,
+        "arrendamiento_qq_ha": 12
+      },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "ingreso_ha", "etiqueta": "Ingreso por ha", "expr": "rinde_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "arriendo_ha", "etiqueta": "Arrendamiento en USD", "expr": "arrendamiento_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + arriendo_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen bruto por ha", "expr": "ingreso_ha - costo_ha", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costo_ha * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Pagar el arrendamiento en quintales lo vuelve invisible hasta que lo pasas a dolares: 12 qq son USD 258/ha, casi la mitad de los costos directos. Te quedan USD 20/ha, un 2,5%. Tecnicamente ganas, pero cualquier granizo, una baja de precio o un rinde 2 qq menor te pone en rojo. Trabajaste un año para empatar."
+    },
+    {
+      "id": "equilibrio-soja-001",
+      "categoria": "punto_equilibrio",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Soja en campo alquilado. Costos directos: USD 430/ha. Arrendamiento: USD 290/ha. Precio: USD 265/tn. Tu rinde esperado es 32 qq/ha.",
+      "datos": {
+        "costos_directos_usd_ha": 430,
+        "arrendamiento_usd_ha": 290,
+        "precio_usd_tn": 265,
+        "rinde_esperado_qq_ha": 32
+      },
+      "pregunta": "¿Tenes colchon suficiente sobre el punto de equilibrio?",
+      "etiquetas": ["Colchon comodo", "Justo", "No llega"],
+      "pasos": [
+        { "clave": "costo_total_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + arrendamiento_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "qq_equilibrio", "etiqueta": "Rinde de equilibrio", "expr": "costo_total_ha / (precio_usd_tn * 0.1)", "unidad": "qq/ha", "decimales": 1 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(rinde_esperado_qq_ha - qq_equilibrio) / qq_equilibrio * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "El atajo mental: cada quintal vale USD 26,5 (precio/10). USD 720 de costo dividido 26,5 son 27 qq/ha para empatar. Con 32 esperados tenes casi 5 qq de colchon, un 18%. Es la forma mas rapida de saber si un alquiler cierra: cuantos quintales necesitas antes de ganar el primer peso."
+    },
+    {
+      "id": "equilibrio-maiz-002",
+      "categoria": "punto_equilibrio",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Maiz con arrendamiento en especie: 22 qq de maiz por ha. Costos directos: USD 820/ha. Precio: USD 180/tn. Viene seco y ajustaste el rinde esperado a 74 qq/ha.",
+      "datos": {
+        "costos_directos_usd_ha": 820,
+        "arrendamiento_qq_ha": 22,
+        "precio_usd_tn": 180,
+        "rinde_esperado_qq_ha": 74
+      },
+      "pregunta": "¿Tenes colchon suficiente sobre el punto de equilibrio?",
+      "etiquetas": ["Colchon comodo", "Justo", "No llega"],
+      "pasos": [
+        { "clave": "arriendo_ha", "etiqueta": "Arrendamiento en USD", "expr": "arrendamiento_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_total_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + arriendo_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "qq_equilibrio", "etiqueta": "Rinde de equilibrio", "expr": "costo_total_ha / (precio_usd_tn * 0.1)", "unidad": "qq/ha", "decimales": 1 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(rinde_esperado_qq_ha - qq_equilibrio) / qq_equilibrio * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Cuando el arrendamiento es en quintales, el punto de equilibrio se puede pensar directo: necesitas 45,6 qq para los costos directos MAS los 22 del arriendo, o sea 67,6 qq/ha. Con 74 esperados el colchon es del 9%: seis quintales y medio. En un año seco eso se evapora en dos semanas sin lluvia."
+    },
+    {
+      "id": "equilibrio-servicio-003",
+      "categoria": "punto_equilibrio",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Pensas comprar una sembradora para hacer servicio a terceros. Entre amortizacion, seguro y patente te deja un costo fijo de USD 34.000 al año. Cobras USD 78/ha y el costo variable (combustible, mano de obra, mantenimiento) es USD 31/ha. Hoy tenes asegurado el laburo de tus 420 ha propias.",
+      "datos": {
+        "costo_fijo_anual_usd": 34000,
+        "tarifa_servicio_usd_ha": 78,
+        "costo_variable_usd_ha": 31,
+        "hectareas_aseguradas": 420
+      },
+      "pregunta": "¿Con las 420 ha ya te cierra?",
+      "etiquetas": ["Cierra con margen", "Justo", "No cierra"],
+      "pasos": [
+        { "clave": "margen_contrib_ha", "etiqueta": "Margen de contribucion por ha", "expr": "tarifa_servicio_usd_ha - costo_variable_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "ha_equilibrio", "etiqueta": "Hectareas de equilibrio", "expr": "costo_fijo_anual_usd / margen_contrib_ha", "unidad": "ha", "decimales": 1 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(hectareas_aseguradas - ha_equilibrio) / ha_equilibrio * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Cada hectarea deja USD 47 para cubrir el costo fijo, asi que necesitas 34.000/47 = 723 ha por año. Tus 420 cubren apenas el 58%: te faltan 300 ha de terceros para empatar. El error clasico es comparar la tarifa (78) con el costo variable (31) y concluir 'gano 47 por ha'. No ganas nada hasta la hectarea 723."
+    },
+    {
+      "id": "conversion-acopio-001",
+      "categoria": "conversion_unidades",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "El acopiador te dice: 'tenes 1.250 quintales, son 125 toneladas, te pago USD 32.500'. El precio del dia es USD 268/tn.",
+      "datos": {
+        "quintales": 1250,
+        "precio_usd_tn": 268,
+        "oferta_usd": 32500
+      },
+      "pregunta": "¿Cierra la oferta con el precio del dia?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "toneladas", "etiqueta": "Toneladas", "expr": "quintales * 0.1", "unidad": "tn", "decimales": 0 },
+        { "clave": "valor_real", "etiqueta": "Valor al precio del dia", "expr": "toneladas * precio_usd_tn", "unidad": "USD", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio de la oferta", "expr": "(oferta_usd - valor_real) / valor_real * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "La conversion que te dijo esta bien (1.250 qq son 125 tn), el precio es el que no cierra: 125 x 268 son USD 33.500, no 32.500. Te falta un 3%, mil dolares. Cuando alguien te da el dato bien y el numero mal, el dato correcto funciona como anestesia."
+    },
+    {
+      "id": "conversion-fertilizante-002",
+      "categoria": "conversion_unidades",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Te cotizan urea a $1.520.000 la tonelada, con el dolar a $1.150. El precio de referencia que venias manejando es USD 1.180/tn.",
+      "datos": {
+        "precio_ars_tn": 1520000,
+        "tipo_cambio": 1150,
+        "referencia_usd_tn": 1180
+      },
+      "pregunta": "¿Cierra el precio en pesos con tu referencia?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "precio_usd_tn", "etiqueta": "Precio en dolares", "expr": "precio_ars_tn / tipo_cambio", "unidad": "USD/tn", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio contra la referencia", "expr": "(referencia_usd_tn - precio_usd_tn) / precio_usd_tn * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "malo",
+      "explicacion": "1.520.000 / 1.150 son USD 1.322/tn: un 11% arriba de tu referencia de 1.180. El atajo: 1.180 x 1.150 son $1.357.000, y te estan pidiendo $1.520.000. Cuando el precio viene en pesos y la referencia en dolares, el tipo de cambio es donde se esconde el sobreprecio."
+    },
+    {
+      "id": "conversion-flete-003",
+      "categoria": "conversion_unidades",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "El camionero te cobra $585.000 por llevar 28 tn a 180 km. La tarifa de referencia que te pasaron es USD 0,10 por tonelada y por kilometro. El dolar esta a $1.150.",
+      "datos": {
+        "costo_ars": 585000,
+        "toneladas": 28,
+        "kilometros": 180,
+        "tarifa_usd_tn_km": 0.1,
+        "tipo_cambio": 1150
+      },
+      "pregunta": "¿Cierra lo que te cobra con la tarifa de referencia?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "costo_usd", "etiqueta": "Lo que te cobra, en dolares", "expr": "costo_ars / tipo_cambio", "unidad": "USD", "decimales": 0 },
+        { "clave": "referencia_usd", "etiqueta": "Tarifa de referencia", "expr": "toneladas * kilometros * tarifa_usd_tn_km", "unidad": "USD", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio", "expr": "(referencia_usd - costo_usd) / costo_usd * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Tres unidades en juego (pesos, toneladas, kilometros) y el numero igual cierra: 28 x 180 x 0,10 son USD 504, y $585.000 / 1.150 son USD 509. Menos de un 1% de diferencia. Vale saber que son USD 18/tn, que es el numero que despues podes comparar de memoria con otro flete."
+    },
+    {
+      "id": "costo-insumos-001",
+      "categoria": "costo_unitario",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Cerraste la campaña: gastaste USD 96.400 en insumos y USD 18.900 en labores para 215 ha. En la zona te dicen que el costo de referencia es USD 560/ha.",
+      "datos": {
+        "insumos_usd": 96400,
+        "labores_usd": 18900,
+        "hectareas": 215,
+        "referencia_usd_ha": 560
+      },
+      "pregunta": "¿Estas bien de costos contra la zona?",
+      "etiquetas": ["Bien abajo", "Ajustado", "Estas caro"],
+      "pasos": [
+        { "clave": "costo_total", "etiqueta": "Costo total", "expr": "insumos_usd + labores_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_ha", "etiqueta": "Costo por ha", "expr": "costo_total / hectareas", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "brecha_pct", "etiqueta": "Cuanto estas por debajo", "expr": "(referencia_usd_ha - costo_ha) / costo_ha * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "brecha_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "115.300 / 215 son USD 536/ha. Estas por debajo de los 560 de referencia, pero por un 4%: dentro del ruido. El atajo es redondear a 115.000 / 215 y notar que 215 x 500 = 107.500 y 215 x 550 = 118.250, asi que el numero esta entre 500 y 550. No hace falta dividir con precision para saber que no te fuiste al mazo."
+    },
+    {
+      "id": "costo-recria-002",
+      "categoria": "costo_unitario",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Recria: compras 120 terneros de 180 kg a USD 2,90/kg y los vendes a 320 kg. Son 150 dias a USD 0,62 por cabeza por dia de alimentacion. El precio de venta del gordo es USD 2,35/kg.",
+      "datos": {
+        "peso_entrada_kg": 180,
+        "peso_salida_kg": 320,
+        "precio_compra_usd_kg": 2.9,
+        "precio_venta_usd_kg": 2.35,
+        "dias": 150,
+        "costo_alimento_usd_cab_dia": 0.62
+      },
+      "pregunta": "¿A cuanto te sale el kilo final, y cierra?",
+      "etiquetas": ["Buen negocio", "Ajustado", "Mal negocio"],
+      "pasos": [
+        { "clave": "costo_compra_cab", "etiqueta": "Costo de compra por cabeza", "expr": "peso_entrada_kg * precio_compra_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_alimento_cab", "etiqueta": "Alimentacion por cabeza", "expr": "costo_alimento_usd_cab_dia * dias", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_total_cab", "etiqueta": "Costo total por cabeza", "expr": "costo_compra_cab + costo_alimento_cab", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_kg_final", "etiqueta": "Costo del kilo final", "expr": "costo_total_cab / peso_salida_kg", "unidad": "USD/kg", "decimales": 2 },
+        { "clave": "brecha_pct", "etiqueta": "Margen sobre el costo del kilo", "expr": "(precio_venta_usd_kg - costo_kg_final) / costo_kg_final * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "brecha_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "La cuenta que asusta es que compras a 2,90 y vendes a 2,35: parece perdida segura. Pero el kilo que importa es el final: USD 615 de costo total sobre 320 kg son USD 1,92/kg, porque los 140 kg que engordo salieron a USD 0,66 cada uno y te licuaron el precio de compra. Vendiendo a 2,35 el margen es del 22%. En recria siempre mira el costo del kilo de salida, nunca el de entrada."
+    },
+    {
+      "id": "roi-embolsadora-001",
+      "categoria": "roi_payback",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Una embolsadora propia sale USD 26.000. Te ahorra USD 11/tn de gastos de acopio y manejas 1.900 tn por año. El mantenimiento anual es USD 1.400.",
+      "datos": {
+        "inversion_usd": 26000,
+        "ahorro_usd_tn": 11,
+        "toneladas_anuales": 1900,
+        "costo_mantenimiento_usd_anual": 1400
+      },
+      "pregunta": "¿Conviene la inversion?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "ahorro_anual", "etiqueta": "Ahorro bruto anual", "expr": "ahorro_usd_tn * toneladas_anuales", "unidad": "USD", "decimales": 0 },
+        { "clave": "beneficio_anual", "etiqueta": "Beneficio neto anual", "expr": "ahorro_anual - costo_mantenimiento_usd_anual", "unidad": "USD", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Payback simple", "expr": "inversion_usd / beneficio_anual", "unidad": "años", "decimales": 1 },
+        { "clave": "roi_pct", "etiqueta": "ROI anual", "expr": "beneficio_anual / inversion_usd * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "11 x 1.900 son USD 20.900 de ahorro; menos 1.400 de mantenimiento quedan 19.500 al año contra una inversion de 26.000. Se paga en 1 año y 4 meses, ROI del 75%. El numero que decide es el volumen: con 600 tn/año en vez de 1.900 el payback se estira a mas de 5 años y la conversacion cambia por completo."
+    },
+    {
+      "id": "roi-riego-002",
+      "categoria": "roi_payback",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Un pivot de riego para 90 ha sale USD 310.000 instalado. Esperas 38 qq/ha mas de maiz (precio USD 175/tn). La energia para riego cuesta USD 210/ha por campaña y el mantenimiento del equipo USD 9.000 al año.",
+      "datos": {
+        "inversion_usd": 310000,
+        "hectareas": 90,
+        "mejora_rinde_qq_ha": 38,
+        "precio_usd_tn": 175,
+        "costo_energia_usd_ha": 210,
+        "costo_mantenimiento_usd_anual": 9000
+      },
+      "pregunta": "¿Conviene la inversion?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "ingreso_extra_ha", "etiqueta": "Ingreso extra por ha", "expr": "mejora_rinde_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "beneficio_ha", "etiqueta": "Beneficio por ha", "expr": "ingreso_extra_ha - costo_energia_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "beneficio_anual", "etiqueta": "Beneficio neto anual", "expr": "beneficio_ha * hectareas - costo_mantenimiento_usd_anual", "unidad": "USD", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Payback simple", "expr": "inversion_usd / beneficio_anual", "unidad": "años", "decimales": 1 },
+        { "clave": "roi_pct", "etiqueta": "ROI anual", "expr": "beneficio_anual / inversion_usd * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "38 qq extra son USD 665/ha; menos 210 de energia quedan 455/ha, por 90 ha son 40.950, menos 9.000 de mantenimiento: USD 31.950 al año. Sobre 310.000 es un ROI del 10% y un payback de casi 10 años. No es un error, es una decision distinta: a esos plazos lo que decide no es la cuenta sino si el riego te saca la varianza de encima y si aguantas 10 años con el capital ahi."
+    },
+    {
+      "id": "comprar-cosechadora-001",
+      "categoria": "comprar_vs_alquilar",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Cosechas 380 ha por año. El contratista cobra USD 95/ha. Una cosechadora usada sale USD 240.000 y le das 10 años de vida util. Operarla te cuesta USD 48/ha (combustible, mano de obra) mas USD 7.200 fijos al año de seguro, galpon y mantenimiento.",
+      "datos": {
+        "hectareas_anuales": 380,
+        "tarifa_contratista_usd_ha": 95,
+        "inversion_usd": 240000,
+        "vida_util_anios": 10,
+        "costo_operativo_propio_usd_ha": 48,
+        "costo_fijo_anual_usd": 7200
+      },
+      "pregunta": "¿Conviene comprarla?",
+      "etiquetas": ["Conviene comprar", "Da igual", "Conviene contratar"],
+      "pasos": [
+        { "clave": "costo_contratista_anual", "etiqueta": "Contratista, por año", "expr": "hectareas_anuales * tarifa_contratista_usd_ha", "unidad": "USD", "decimales": 0 },
+        { "clave": "amortizacion_anual", "etiqueta": "Amortizacion anual", "expr": "inversion_usd / vida_util_anios", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_propio_anual", "etiqueta": "Maquina propia, por año", "expr": "amortizacion_anual + hectareas_anuales * costo_operativo_propio_usd_ha + costo_fijo_anual_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "ahorro_pct", "etiqueta": "Ahorro de comprar", "expr": "(costo_contratista_anual - costo_propio_anual) / costo_contratista_anual * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "ahorro_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Contratista: 380 x 95 = USD 36.100 al año. Propia: 24.000 de amortizacion + 18.240 de operacion + 7.200 fijos = USD 49.440. Comprarla te sale un 37% mas caro. La trampa es comparar 95 contra 48 y ver una ganga: los USD 24.000 de amortizacion son USD 63/ha con solo 380 ha, y ahi se termina la discusion. Con 900 ha la cuenta se da vuelta."
+    },
+    {
+      "id": "comprar-campo-002",
+      "categoria": "comprar_vs_alquilar",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Te ofrecen un campo agricola a USD 9.500/ha. El arrendamiento en la zona es 14 qq de soja por ha y la soja esta a USD 265/tn.",
+      "datos": {
+        "precio_campo_usd_ha": 9500,
+        "arrendamiento_qq_ha": 14,
+        "precio_usd_tn": 265
+      },
+      "pregunta": "¿Conviene comprar a ese precio?",
+      "etiquetas": ["Conviene comprar", "Ajustado", "Conviene alquilar"],
+      "pasos": [
+        { "clave": "arriendo_usd_ha", "etiqueta": "Arrendamiento en USD", "expr": "arrendamiento_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Años de arrendamiento para pagarlo", "expr": "precio_campo_usd_ha / arriendo_usd_ha", "unidad": "años", "decimales": 1 },
+        { "clave": "renta_pct", "etiqueta": "Renta anual del campo", "expr": "arriendo_usd_ha / precio_campo_usd_ha * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "renta_pct", "bueno_min": 6, "malo_max": 3 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "14 qq son USD 371/ha de alquiler, que sobre 9.500 es una renta del 3,9% anual: 26 años de arrendamiento para recuperar la compra. Comparado con el alquiler puro es flojo, y ahi la decision deja de ser productiva y pasa a ser financiera: comprar campo se paga con la suba del valor de la tierra, no con la renta."
+    }
+  ]
+}

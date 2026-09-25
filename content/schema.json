@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Escenario de Numeros Gruesos",
+  "descripcion": "Contrato entre contenido y motor. tools/validar.html lo interpreta con un chequeador propio (subconjunto de JSON Schema: type, required, enum, minimum, maximum, items, properties) para no depender de una libreria externa y poder validar offline.",
+  "type": "object",
+  "required": ["id", "categoria", "dificultad", "enunciado", "datos", "pregunta", "pasos", "criterio", "respuesta_correcta", "explicacion"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "descripcion": "Unico. Convencion: categoria-tema-NNN."
+    },
+    "categoria": {
+      "type": "string",
+      "enum": [
+        "margen_bruto",
+        "punto_equilibrio",
+        "costo_unitario",
+        "roi_payback",
+        "comprar_vs_alquilar",
+        "conversion_unidades"
+      ]
+    },
+    "dificultad": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "verificado": {
+      "type": "boolean",
+      "descripcion": "false mientras los numeros sean placeholders plausibles y no datos de mercado revisados."
+    },
+    "enunciado": {
+      "type": "string",
+      "descripcion": "Texto corto de la situacion. Tiene que contener todos los datos necesarios."
+    },
+    "datos": {
+      "type": "object",
+      "descripcion": "Valores numericos del escenario. Sus claves son las variables disponibles para el primer paso.",
+      "valores": "number"
+    },
+    "pregunta": { "type": "string" },
+    "etiquetas": {
+      "type": "array",
+      "descripcion": "Opcional. Los 3 botones, en el orden bueno / ajustado / malo. Default: Buen negocio / Ajustado / Mal negocio.",
+      "longitud": 3,
+      "items": { "type": "string" }
+    },
+    "pasos": {
+      "type": "array",
+      "minimo": 1,
+      "descripcion": "El calculo, en orden. Cada expr puede usar las claves de datos y las claves de los pasos anteriores.",
+      "items": {
+        "type": "object",
+        "required": ["clave", "etiqueta", "expr"],
+        "properties": {
+          "clave": { "type": "string", "descripcion": "Nombre de variable. Queda disponible para los pasos siguientes y para criterio.metrica." },
+          "etiqueta": { "type": "string", "descripcion": "Como se muestra el paso al jugador." },
+          "expr": { "type": "string", "descripcion": "Solo aritmetica y nombres de variable: [0-9a-zA-Z_+-*/(). ]" },
+          "unidad": { "type": "string" },
+          "decimales": { "type": "integer", "minimum": 0, "maximum": 4 }
+        }
+      }
+    },
+    "criterio": {
+      "type": "object",
+      "descripcion": "Hace el veredicto derivable de la matematica: metrica >= bueno_min -> bueno; metrica <= malo_max -> malo; en el medio -> ajustado. Es una banda de un solo lado: bueno_min tiene que ser mayor que malo_max.",
+      "required": ["metrica", "bueno_min", "malo_max"],
+      "properties": {
+        "metrica": { "type": "string", "descripcion": "Clave de uno de los pasos." },
+        "bueno_min": { "type": "number" },
+        "malo_max": { "type": "number" }
+      }
+    },
+    "respuesta_correcta": {
+      "type": "string",
+      "enum": ["bueno", "ajustado", "malo"],
+      "descripcion": "Declarado a mano. El validador lo recalcula desde criterio y avisa si no coincide."
+    },
+    "explicacion": {
+      "type": "string",
+      "descripcion": "Por que da eso y cual es el atajo mental. Es la parte que entrena, mas que el resultado."
+    }
+  }
+}

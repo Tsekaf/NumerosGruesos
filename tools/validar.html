@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validador de escenarios — Números Gruesos</title>
+<!--
+  Reemplaza a tools/validate_scenarios.py de la spec: esta maquina no tiene
+  Python, y de todos modos validar en el navegador tiene una ventaja real, que
+  es usar EXACTAMENTE el mismo src/calculo.js que usa el juego. Si el validador
+  tuviera su propia copia de la matematica podria aprobar un escenario que el
+  juego resuelve distinto.
+
+  Chequea:
+    1. schema (campos, tipos, enums, rangos) contra content/schema.json
+    2. que toda expr parsee y solo use variables existentes
+    3. que el veredicto derivado de `criterio` coincida con `respuesta_correcta`
+    4. ids unicos y cobertura por categoria / dificultad
+-->
+<style>
+  :root {
+    --bg:#0f1115; --panel:#171a21; --ink:#e7ebf0; --muted:#98a2b3;
+    --line:#272b33; --ok:#3fb950; --bad:#f85149; --warn:#d29922; --accent:#58a6ff;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:24px 16px 60px; background:var(--bg); color:var(--ink);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:14px;
+    line-height:1.55;
+  }
+  .wrap { max-width:940px; margin:0 auto; }
+  h1 { font-size:1.2rem; margin:0 0 4px; letter-spacing:1px; }
+  .sub { color:var(--muted); margin-bottom:22px; font-size:.82rem; }
+  .resumen {
+    border:1px solid var(--line); border-radius:10px; background:var(--panel);
+    padding:16px 18px; margin-bottom:22px;
+  }
+  .resumen.ok { border-color:var(--ok); }
+  .resumen.bad { border-color:var(--bad); }
+  .veredicto { font-size:1.05rem; font-weight:bold; }
+  .veredicto.ok { color:var(--ok); }
+  .veredicto.bad { color:var(--bad); }
+  table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.8rem; }
+  th, td { text-align:left; padding:4px 10px 4px 0; color:var(--muted); }
+  th { color:var(--ink); font-weight:normal; border-bottom:1px solid var(--line); }
+  .item {
+    border:1px solid var(--line); border-left:3px solid var(--ok); border-radius:8px;
+    background:var(--panel); padding:12px 14px; margin-bottom:8px;
+  }
+  .item.bad { border-left-color:var(--bad); }
+  .item.warn { border-left-color:var(--warn); }
+  .id { color:var(--accent); font-weight:bold; }
+  .meta { color:var(--muted); font-size:.78rem; }
+  .err { color:var(--bad); margin-top:6px; }
+  .adv { color:var(--warn); margin-top:6px; }
+  .pasos { margin-top:8px; font-size:.78rem; color:var(--muted); }
+  .pasos b { color:var(--ink); font-weight:normal; }
+  .ok-tag { color:var(--ok); }
+  h2 { font-size:.9rem; margin:26px 0 10px; color:var(--muted); letter-spacing:1px;
+       text-transform:uppercase; border-bottom:1px solid var(--line); padding-bottom:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Validador de escenarios</h1>
+  <div class="sub">Usa el mismo <code>src/calculo.js</code> que el juego. Recargá la página después de editar <code>content/scenarios.json</code>.</div>
+  <div id="salida">Cargando…</div>
+</div>
+
+<script src="../src/calculo.js"></script>
+<script>
+const salida = document.getElementById('salida');
+
+/* --- Mini chequeador de JSON Schema ------------------------------------
+   Solo el subconjunto que usa nuestro schema (type, required, enum,
+   minimum/maximum, items, properties). Preferimos 60 lineas propias a bajar
+   una libreria de un CDN: el validador tiene que funcionar offline igual que
+   el juego. */
+
+function tipoDe(v) {
+  if (Array.isArray(v)) return 'array';
+  if (v === null) return 'null';
+  if (typeof v === 'number') return Number.isInteger(v) ? 'integer' : 'number';
+  return typeof v;
+}
+
+function tipoOk(valor, esperado) {
+  const t = tipoDe(valor);
+  if (esperado === 'number') return t === 'number' || t === 'integer';
+  return t === esperado;
+}
+
+function chequearSchema(obj, schema, ruta, errores) {
+  (schema.required || []).forEach((campo) => {
+    if (!(campo in obj)) errores.push(`falta el campo obligatorio "${ruta}${campo}"`);
+  });
+
+  Object.entries(schema.properties || {}).forEach(([campo, def]) => {
+    if (!(campo in obj)) return;
+    const valor = obj[campo];
+    const donde = `${ruta}${campo}`;
+
+    if (def.type && !tipoOk(valor, def.type)) {
+      errores.push(`"${donde}" deberia ser ${def.type} y es ${tipoDe(valor)}`);
+      return;
+    }
+    if (def.enum && !def.enum.includes(valor)) {
+      errores.push(`"${donde}" = "${valor}" no esta en [${def.enum.join(', ')}]`);
+    }
+    if (def.minimum != null && valor < def.minimum) {
+      errores.push(`"${donde}" = ${valor} es menor que el minimo ${def.minimum}`);
+    }
+    if (def.maximum != null && valor > def.maximum) {
+      errores.push(`"${donde}" = ${valor} es mayor que el maximo ${def.maximum}`);
+    }
+    if (def.longitud != null && valor.length !== def.longitud) {
+      errores.push(`"${donde}" deberia tener ${def.longitud} elementos y tiene ${valor.length}`);
+    }
+    if (def.minimo != null && valor.length < def.minimo) {
+      errores.push(`"${donde}" deberia tener al menos ${def.minimo} elemento(s)`);
+    }
+    if (def.type === 'array' && def.items) {
+      valor.forEach((el, i) => {
+        if (def.items.type && !tipoOk(el, def.items.type)) {
+          errores.push(`"${donde}[${i}]" deberia ser ${def.items.type}`);
+        } else if (def.items.properties) {
+          chequearSchema(el, def.items, `${donde}[${i}].`, errores);
+        }
+      });
+    }
+    if (def.type === 'object' && def.properties) {
+      chequearSchema(valor, def, `${donde}.`, errores);
+    }
+    // Caso especial: `datos` es un mapa libre clave -> numero.
+    if (def.valores === 'number') {
+      Object.entries(valor).forEach(([k, v]) => {
+        if (typeof v !== 'number' || !Number.isFinite(v)) {
+          errores.push(`"${donde}.${k}" tiene que ser un numero finito (es ${JSON.stringify(v)})`);
+        }
+      });
+    }
+  });
+}
+
+/* --- Chequeos propios del dominio ------------------------------------- */
+
+function validarEscenario(esc, schema, idsVistos) {
+  const errores = [];
+  const advertencias = [];
+  let resuelto = null;
+
+  chequearSchema(esc, schema, '', errores);
+
+  if (esc.id) {
+    if (idsVistos.has(esc.id)) errores.push(`id duplicado: "${esc.id}"`);
+    idsVistos.add(esc.id);
+  }
+
+  // Las expresiones solo pueden mirar hacia atras: datos + pasos anteriores.
+  if (Array.isArray(esc.pasos) && esc.datos) {
+    const disponibles = new Set(Object.keys(esc.datos));
+    esc.pasos.forEach((paso, i) => {
+      if (!paso || typeof paso.expr !== 'string') return;
+      Calculo.variablesDe(paso.expr).forEach((v) => {
+        if (!disponibles.has(v)) {
+          errores.push(`paso ${i + 1} ("${paso.clave}"): usa "${v}", que no esta en datos ni en un paso anterior`);
+        }
+      });
+      if (paso.clave) {
+        if (disponibles.has(paso.clave)) {
+          errores.push(`paso ${i + 1}: la clave "${paso.clave}" pisa un nombre ya existente`);
+        }
+        disponibles.add(paso.clave);
+      }
+    });
+  }
+
+  if (esc.criterio && esc.criterio.bueno_min <= esc.criterio.malo_max) {
+    errores.push(`criterio invalido: bueno_min (${esc.criterio.bueno_min}) tiene que ser mayor que malo_max (${esc.criterio.malo_max})`);
+  }
+
+  // El chequeo central: resolver de verdad y comparar el veredicto.
+  if (!errores.length) {
+    try {
+      resuelto = Calculo.resolver(esc);
+      if (resuelto.veredicto !== esc.respuesta_correcta) {
+        errores.push(
+          `VEREDICTO: la cuenta da "${resuelto.veredicto}" pero el escenario declara "${esc.respuesta_correcta}" ` +
+          `(${esc.criterio.metrica} = ${Calculo.formatear(resuelto.valores[esc.criterio.metrica], 2)}, ` +
+          `bueno si >= ${esc.criterio.bueno_min}, malo si <= ${esc.criterio.malo_max})`
+        );
+      }
+    } catch (e) {
+      errores.push(`no se pudo resolver: ${e.message}`);
+    }
+  }
+
+  // Cada dato deberia aparecer en el enunciado, si no el jugador no puede resolverlo.
+  if (esc.datos && esc.pasos) {
+    const usadas = new Set();
+    esc.pasos.forEach((p) => Calculo.variablesDe(p.expr || '').forEach((v) => usadas.add(v)));
+    Object.keys(esc.datos).forEach((k) => {
+      if (!usadas.has(k)) advertencias.push(`el dato "${k}" no lo usa ningun paso`);
+    });
+  }
+
+  if (esc.verificado === false) {
+    advertencias.push('numeros sin verificar contra datos de mercado');
+  }
+
+  return { esc, errores, advertencias, resuelto };
+}
+
+/* --- Render ------------------------------------------------------------ */
+
+function esc_(s) {
+  return String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+}
+
+function render(schema, data) {
+  const idsVistos = new Set();
+  const resultados = data.escenarios.map((e) => validarEscenario(e, schema, idsVistos));
+
+  const conError = resultados.filter((r) => r.errores.length);
+  const conAdv = resultados.filter((r) => !r.errores.length && r.advertencias.length);
+
+  // Cobertura
+  const porCat = {};
+  Object.keys(Calculo.CATEGORIAS).forEach((c) => { porCat[c] = { total: 0, dif: {} }; });
+  resultados.forEach(({ esc }) => {
+    const c = porCat[esc.categoria];
+    if (!c) return;
+    c.total++;
+    c.dif[esc.dificultad] = (c.dif[esc.dificultad] || 0) + 1;
+  });
+  const sinCubrir = Object.entries(porCat).filter(([, v]) => v.total === 0).map(([k]) => k);
+
+  let html = '';
+  const todoOk = conError.length === 0;
+  html += `<div class="resumen ${todoOk ? 'ok' : 'bad'}">`;
+  html += `<div class="veredicto ${todoOk ? 'ok' : 'bad'}">`;
+  html += todoOk
+    ? `OK — ${resultados.length} escenarios, 0 errores`
+    : `${conError.length} escenario(s) con error, de ${resultados.length}`;
+  html += `</div>`;
+  html += `<div class="meta">${conAdv.length + conError.filter(r => r.advertencias.length).length} con advertencias `
+       + `&middot; ${sinCubrir.length ? 'categorias sin cubrir: ' + sinCubrir.join(', ') : 'las 6 categorias cubiertas'}</div>`;
+
+  html += `<table><tr><th>Categoria</th><th>Total</th><th>dif 1</th><th>dif 2</th><th>dif 3</th></tr>`;
+  Object.entries(porCat).forEach(([k, v]) => {
+    html += `<tr><td>${Calculo.CATEGORIAS[k]}</td><td>${v.total}</td>`
+         + `<td>${v.dif[1] || 0}</td><td>${v.dif[2] || 0}</td><td>${v.dif[3] || 0}</td></tr>`;
+  });
+  html += `</table></div>`;
+
+  html += `<h2>Escenarios</h2>`;
+  resultados.forEach(({ esc, errores, advertencias, resuelto }) => {
+    const clase = errores.length ? 'bad' : (advertencias.length ? 'warn' : '');
+    html += `<div class="item ${clase}">`;
+    html += `<span class="id">${esc_(esc.id || '(sin id)')}</span> `;
+    html += `<span class="meta">${esc_(esc.categoria || '?')} &middot; dif ${esc.dificultad} &middot; `;
+    html += errores.length ? `<span style="color:var(--bad)">ERROR</span>` : `<span class="ok-tag">ok</span>`;
+    html += `</span>`;
+
+    if (resuelto) {
+      html += `<div class="pasos">`;
+      resuelto.pasos.forEach((p) => {
+        html += `${esc_(p.etiqueta)}: <b>${esc_(p.cuenta)} = ${esc_(p.texto)}</b><br>`;
+      });
+      html += `veredicto derivado: <b>${resuelto.veredicto}</b> (declarado: ${esc_(esc.respuesta_correcta)})`;
+      html += `</div>`;
+    }
+    errores.forEach((e) => { html += `<div class="err">✗ ${esc_(e)}</div>`; });
+    advertencias.forEach((a) => { html += `<div class="adv">! ${esc_(a)}</div>`; });
+    html += `</div>`;
+  });
+
+  salida.innerHTML = html;
+}
+
+Promise.all([
+  fetch('../content/schema.json').then((r) => r.json()),
+  fetch('../content/scenarios.json').then((r) => r.json()),
+])
+  .then(([schema, data]) => render(schema, data))
+  .catch((e) => {
+    salida.innerHTML = `<div class="resumen bad"><div class="veredicto bad">No se pudieron cargar los archivos</div>`
+      + `<div class="meta">${esc_(e.message)}</div>`
+      + `<div class="meta">Si abriste este archivo con doble clic, no va a funcionar: fetch no anda sobre file://. `
+      + `Levantá el server con tools/servir.ps1 y entrá por http://localhost:8080/tools/validar.html</div></div>`;
+  });
+</script>
+</body>
+</html>
