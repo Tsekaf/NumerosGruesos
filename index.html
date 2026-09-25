@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<meta name="description" content="Entrenador de calculo mental de economia de campo: margenes, punto de equilibrio, ROI.">
+<title>Números Gruesos</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Barra de estado: siempre visible, es el marcador del juego. -->
+  <header class="barra" id="barra" hidden>
+    <button class="icono" id="btn-volver" title="Volver">&#8592;</button>
+    <div class="marcador">
+      <span class="puntos" id="m-puntos">0</span>
+      <span class="racha" id="m-racha"></span>
+    </div>
+    <button class="icono" id="btn-progreso" title="Progreso">&#9776;</button>
+  </header>
+
+  <!-- ---------------- INICIO ---------------- -->
+  <section class="pantalla activa" id="p-inicio">
+    <div class="portada">
+      <h1>Números<br>Gruesos</h1>
+      <p class="bajada">
+        Doce segundos por carta. Estimás si el negocio cierra, marcás cuánta
+        confianza tenés, y recién después ves la cuenta.
+      </p>
+      <button class="principal" id="btn-jugar">Jugar</button>
+      <button class="secundario" id="btn-ver-progreso">Ver progreso</button>
+      <p class="pie" id="pie-inicio"></p>
+    </div>
+  </section>
+
+  <!-- ---------------- CARTA ---------------- -->
+  <section class="pantalla" id="p-carta">
+    <div class="reloj"><div class="reloj-barra" id="reloj-barra"></div></div>
+
+    <div class="cabecera-carta">
+      <span class="chip" id="c-categoria"></span>
+      <span class="chip chip-dif" id="c-dificultad"></span>
+    </div>
+
+    <p class="enunciado" id="c-enunciado"></p>
+    <dl class="datos" id="c-datos"></dl>
+
+    <div class="decision">
+      <p class="pregunta" id="c-pregunta"></p>
+
+      <div class="confianza">
+        <span class="rotulo">Confianza</span>
+        <div class="chips-confianza" id="c-confianza">
+          <button data-conf="baja">Baja</button>
+          <button data-conf="media" class="sel">Media</button>
+          <button data-conf="alta">Alta</button>
+        </div>
+      </div>
+
+      <div class="veredictos" id="c-veredictos">
+        <button data-veredicto="bueno" class="v-bueno"></button>
+        <button data-veredicto="ajustado" class="v-ajustado"></button>
+        <button data-veredicto="malo" class="v-malo"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------- REVELACION ---------------- -->
+  <section class="pantalla" id="p-revelacion">
+    <div class="resultado" id="r-resultado">
+      <div class="resultado-titulo" id="r-titulo"></div>
+      <div class="resultado-detalle" id="r-detalle"></div>
+      <div class="resultado-puntos" id="r-puntos"></div>
+    </div>
+
+    <h3 class="seccion">La cuenta</h3>
+    <ol class="pasos" id="r-pasos"></ol>
+
+    <h3 class="seccion">Por qué</h3>
+    <p class="explicacion" id="r-explicacion"></p>
+
+    <button class="principal" id="btn-siguiente">Siguiente carta</button>
+    <button class="secundario" id="btn-parar">Parar por hoy</button>
+  </section>
+
+  <!-- ---------------- PROGRESO ---------------- -->
+  <section class="pantalla" id="p-progreso">
+    <h2 class="titulo-pantalla">Progreso</h2>
+
+    <div class="tarjetas" id="g-resumen"></div>
+
+    <h3 class="seccion">Habilidades</h3>
+    <div class="barras" id="g-barras"></div>
+
+    <h3 class="seccion">Calibración</h3>
+    <p class="nota">Cuánto acertás según la confianza que marcaste. Si acertás
+      igual con Alta que con Baja, la confianza no te está diciendo nada.</p>
+    <div class="calibracion" id="g-calibracion"></div>
+
+    <h3 class="seccion">Últimas cartas</h3>
+    <div class="historial" id="g-historial"></div>
+
+    <button class="principal" id="btn-jugar-2">Seguir jugando</button>
+    <button class="peligro" id="btn-borrar">Borrar progreso</button>
+  </section>
+
+</div>
+
+<script src="src/calculo.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>

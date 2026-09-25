@@ -1,0 +1,9 @@
+# Finales de linea deterministas: en el repo siempre LF, sin importar desde
+# que sistema se commitee. Evita diffs fantasma de archivos enteros.
+* text=auto eol=lf
+
+# PowerShell se queda con CRLF: es lo que espera Windows.
+*.ps1 text eol=crlf
+
+# Binarios: que git no los toque.
+*.png binary

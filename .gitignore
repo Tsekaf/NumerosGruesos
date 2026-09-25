@@ -1,0 +1,18 @@
+# Sistema operativo
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Temporales
+*.log
+*.tmp
+
+# Claude Code: launch.json SI se versiona (documenta como levantar el server,
+# igual que un .vscode/launch.json). Lo local y personal, no.
+.claude/settings.local.json
