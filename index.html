@@ -2,8 +2,21 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f1115">
+
+<!-- iPhone:
+     - viewport-fit=cover deja que el fondo llegue debajo del notch y de la barra
+       de gestos; el contenido lo separa el CSS con env(safe-area-inset-*).
+     - maximum-scale + user-scalable evitan el zoom por doble tap, que en un juego
+       de botones grandes es siempre accidental.
+     - apple-mobile-web-app-capable hace que, agregado a la pantalla de inicio,
+       abra sin la barra de Safari. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#e3ded2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Gruesos">
+<meta name="format-detection" content="telephone=no">
 <meta name="description" content="Entrenador de calculo mental de economia de campo: margenes, punto de equilibrio, ROI.">
 <title>Números Gruesos</title>
 <link rel="manifest" href="manifest.json">
@@ -30,18 +43,25 @@
     <div class="portada">
       <h1>Números<br>Gruesos</h1>
       <p class="bajada">
-        Doce segundos por carta. Estimás si el negocio cierra, marcás cuánta
-        confianza tenés, y recién después ves la cuenta.
+        Estimás si el negocio cierra, marcás cuánta confianza tenés, y recién
+        después ves la cuenta. La teoría está atrás, para cuando no te salga.
       </p>
       <button class="principal" id="btn-jugar">Jugar</button>
+      <button class="secundario" id="btn-repaso-dia"></button>
+      <button class="secundario" id="btn-teoria">Teoría</button>
       <button class="secundario" id="btn-ver-progreso">Ver progreso</button>
+      <div class="ajuste">
+        <span class="rotulo">Tiempo por carta</span>
+        <div class="chips-tiempo" id="c-tiempo"></div>
+      </div>
+
       <p class="pie" id="pie-inicio"></p>
     </div>
   </section>
 
   <!-- ---------------- CARTA ---------------- -->
   <section class="pantalla" id="p-carta">
-    <div class="reloj"><div class="reloj-barra" id="reloj-barra"></div></div>
+    <div class="reloj" id="reloj"><div class="reloj-barra" id="reloj-barra"></div></div>
 
     <div class="cabecera-carta">
       <span class="chip" id="c-categoria"></span>
@@ -85,6 +105,7 @@
     <h3 class="seccion">Por qué</h3>
     <p class="explicacion" id="r-explicacion"></p>
 
+    <button class="secundario" id="btn-teoria-carta" hidden></button>
     <button class="principal" id="btn-siguiente">Siguiente carta</button>
     <button class="secundario" id="btn-parar">Parar por hoy</button>
   </section>
@@ -110,9 +131,79 @@
     <button class="peligro" id="btn-borrar">Borrar progreso</button>
   </section>
 
+  <!-- ---------------- TEORIA: indice ---------------- -->
+  <section class="pantalla" id="p-teoria">
+    <h2 class="titulo-pantalla">Teoría</h2>
+    <p class="nota">Lo que hay que saber antes de que el número tenga sentido.
+      Cada ficha se puede repasar con preguntas.</p>
+    <div id="t-indice"></div>
+  </section>
+
+  <!-- ---------------- TEORIA: una ficha ---------------- -->
+  <section class="pantalla" id="p-ficha">
+    <div class="ficha-cabecera">
+      <span class="chip" id="f-area"></span>
+      <span class="chip" id="f-sello"></span>
+    </div>
+    <h2 class="titulo-ficha" id="f-titulo"></h2>
+    <p class="f-resumen" id="f-resumen"></p>
+
+    <div class="aviso" id="f-aviso" hidden></div>
+
+    <div class="f-cuerpo" id="f-cuerpo"></div>
+
+    <div id="f-formula-caja" hidden>
+      <h3 class="seccion">La cuenta</h3>
+      <div class="formula">
+        <code id="f-formula"></code>
+        <div class="formula-ej" id="f-ejemplo"></div>
+      </div>
+    </div>
+
+    <div id="f-datos-caja" hidden>
+      <h3 class="seccion">Los números</h3>
+      <dl class="datos" id="f-datos"></dl>
+    </div>
+
+    <button class="principal" id="btn-repasar"></button>
+    <button class="secundario" id="btn-volver-indice">Volver al índice</button>
+  </section>
+
+  <!-- ---------------- TEORIA: repaso ---------------- -->
+  <section class="pantalla" id="p-repaso">
+    <div class="repaso-avance" id="rp-avance"></div>
+
+    <div class="repaso-caja" id="rp-caja">
+      <span class="rotulo" id="rp-tipo"></span>
+      <div class="repaso-origen" id="rp-origen" hidden></div>
+      <p class="repaso-pregunta" id="rp-pregunta"></p>
+
+      <div class="repaso-respuesta" id="rp-respuesta" hidden>
+        <span class="rotulo">Respuesta</span>
+        <p id="rp-texto"></p>
+      </div>
+    </div>
+
+    <button class="principal" id="btn-ver-respuesta">Ver respuesta</button>
+
+    <div class="repaso-juicio" id="rp-juicio" hidden>
+      <button class="secundario" id="btn-no-sabia">No la sabía</button>
+      <button class="principal" id="btn-si-sabia">La sabía</button>
+    </div>
+
+    <div class="repaso-fin" id="rp-fin" hidden>
+      <div class="repaso-fin-titulo" id="rp-fin-titulo"></div>
+      <p class="repaso-fin-detalle" id="rp-fin-detalle"></p>
+      <button class="principal" id="btn-fin-repaso">Listo</button>
+    </div>
+
+    <button class="secundario" id="btn-cortar-repaso">Dejar el repaso</button>
+  </section>
+
 </div>
 
 <script src="src/calculo.js"></script>
+<script src="src/srs.js"></script>
 <script src="src/app.js"></script>
 </body>
 </html>

@@ -95,3 +95,25 @@ La asimetría es a propósito: el juego no entrena sólo a calcular, entrena a s
 marcando Alta que marcando Baja, la confianza no te está diciendo nada.
 
 Todo se puede tunear desde las constantes al principio de `src/app.js`.
+
+## Teoría y repaso
+
+Además de las cartas hay **30 fichas de teoría** (ganadería, agricultura e
+impositivo) con 125 preguntas de repaso. Cuando errás una carta, aparece un botón
+directo a la ficha que la explica.
+
+Cada ficha lleva un sello de confianza, porque no todo lo que dice merece la misma
+fe: **dato firme** es biología o aritmética que no cambia, **valor típico** varía
+por establecimiento y año, y **confirmar** es normativa o práctica que depende de
+una fuente oficial. Las de esa última categoría llevan arriba a quién preguntarle.
+En lo volátil —vacunas, categorías de hacienda, impuestos— se explica qué existe y
+por qué, nunca el número o la fecha, que caducan.
+
+El repaso funciona por **repetición espaciada**: cada pregunta tiene su propio
+calendario, así que acertarla la aleja y fallarla la trae de vuelta. La portada
+muestra cuántas tocan hoy. Hay un tope de 20 por sesión para que volver después de
+meses sin abrir la app no sea un muro de 125 preguntas.
+
+Es autoevaluación, no multiple choice: ves la pregunta, la pensás, revelás la
+respuesta y decidís vos si la sabías. Reconocer la opción correcta y acordarte no
+son lo mismo, y lo segundo es lo que se borra.

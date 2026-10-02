@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ficha de teoría de Números Gruesos",
+  "descripcion": "Una unidad de conocimiento: explica algo Y genera preguntas para recordarlo. Separar 'cuerpo' (lo que leés) de 'preguntas' (lo que te evalúa) es lo que permite que la misma ficha sirva para aprender y para repasar, sin escribir el contenido dos veces.",
+  "type": "object",
+  "required": ["id", "area", "tema", "titulo", "confianza", "volatilidad", "verificado", "resumen", "cuerpo", "preguntas"],
+  "properties": {
+    "id": { "type": "string", "descripcion": "Convención: area-tema-NNN." },
+
+    "area": {
+      "type": "string",
+      "enum": ["ganaderia", "agricultura", "impositivo", "clima_zona"]
+    },
+    "tema": {
+      "type": "string",
+      "descripcion": "Subdivisión libre dentro del área: reproduccion, sanidad, comercializacion, siembra, conversiones..."
+    },
+    "titulo": { "type": "string" },
+
+    "zona": {
+      "type": "string",
+      "enum": ["general", "entre_rios", "gualeguaychu_islas"],
+      "descripcion": "general = vale en cualquier lado (la gestación de una vaca no cambia por provincia). Las otras dos son específicas y hay que revisarlas contra la realidad local."
+    },
+
+    "confianza": {
+      "type": "string",
+      "enum": ["alta", "media", "baja"],
+      "descripcion": "Qué tan seguro es el dato. alta = hecho biológico o aritmético que no cambia. media = valor típico que varía por establecimiento, año o mercado. baja = normativa, precios o prácticas que dependen de una fuente oficial que hay que consultar."
+    },
+
+    "volatilidad": {
+      "type": "string",
+      "enum": ["estable", "revisar_anual", "revisar_campana"],
+      "descripcion": "Cada cuánto caduca. La gestación bovina es estable para siempre; un calendario de vacunación o una alícuota impositiva caduca solo."
+    },
+
+    "verificado": {
+      "type": "boolean",
+      "descripcion": "false hasta que un humano que sabe lo confirme. La app lo muestra en pantalla: una ficha sin verificar se lee distinto a una verificada."
+    },
+    "verificar_con": {
+      "type": "string",
+      "descripcion": "A quién o qué hay que preguntarle: el veterinario, SENASA, INTA, el contador, tu viejo. Sin esto, 'verificado: false' es una queja sin salida."
+    },
+
+    "resumen": {
+      "type": "string",
+      "descripcion": "Una línea. Es lo que se ve en el índice."
+    },
+    "cuerpo": {
+      "type": "array",
+      "items": { "type": "string" },
+      "descripcion": "Los párrafos de la explicación."
+    },
+
+    "datos": {
+      "type": "array",
+      "descripcion": "Los números concretos, aparte del texto, para poder mostrarlos como tabla y para poder preguntarlos.",
+      "items": {
+        "type": "object",
+        "required": ["clave", "valor"],
+        "properties": {
+          "clave": { "type": "string" },
+          "valor": { "type": "string" },
+          "nota": { "type": "string" }
+        }
+      }
+    },
+
+    "formula": {
+      "type": "object",
+      "descripcion": "Si la ficha enseña un cálculo, cómo se hace y un ejemplo resuelto.",
+      "properties": {
+        "expresion": { "type": "string" },
+        "ejemplo": { "type": "string" }
+      }
+    },
+
+    "preguntas": {
+      "type": "array",
+      "descripcion": "De acá sale el quiz. Cada pregunta tiene que poder responderse con lo que dice el cuerpo de la ficha: si no, la ficha está incompleta.",
+      "items": {
+        "type": "object",
+        "required": ["p", "r"],
+        "properties": {
+          "p": { "type": "string", "descripcion": "La pregunta." },
+          "r": { "type": "string", "descripcion": "La respuesta corta." },
+          "tipo": {
+            "type": "string",
+            "enum": ["recordar", "calcular", "criterio"],
+            "descripcion": "recordar = un dato. calcular = hay que hacer una cuenta. criterio = qué harías en tal situación (no tiene respuesta única, es para pensar)."
+          }
+        }
+      }
+    },
+
+    "relacionado": {
+      "type": "array",
+      "items": { "type": "string" },
+      "descripcion": "ids de otras fichas."
+    }
+  }
+}

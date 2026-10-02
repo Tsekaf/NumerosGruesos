@@ -6,15 +6,16 @@
  * archivo: desde /src/sw.js no podria cachear /content/scenarios.json, y el
  * juego no funcionaria sin señal. Desde la raiz el scope es / y cubre todo.
  *
- * Estrategia: cache-first. Es un juego sin backend, el contenido cambia solo
- * cuando yo edito los archivos, y la prioridad es que abra al instante en el
- * campo sin datos.
+ * Estrategia mixta: el codigo y el contenido (html, js, json) van por red
+ * primero con el cache como respaldo, asi una version nueva llega al celu sin
+ * depender de que me acuerde de subir la VERSION. Los estaticos (css, iconos)
+ * van cache-first, que es lo que hace que abra al instante.
  *
- * Al editar cualquier archivo de la lista hay que subir la VERSION, si no el
- * navegador sigue sirviendo la copia vieja.
+ * Igual conviene subir la VERSION al cambiar assets: es lo que borra el cache
+ * viejo en el activate.
  */
 
-const VERSION = 'ng-v1';
+const VERSION = 'ng-v11';
 
 /*
  * En desarrollo (localhost) invertimos la estrategia: primero la red, y el
@@ -31,8 +32,10 @@ const ASSETS = [
   'manifest.json',
   'src/app.js',
   'src/calculo.js',
+  'src/srs.js',
   'src/style.css',
   'content/scenarios.json',
+  'content/fichas.json',
   'icons/icon-192.png',
   'icons/icon-512.png',
 ];
@@ -67,7 +70,26 @@ self.addEventListener('fetch', (ev) => {
   // Solo GET del mismo origen: nada de POST ni de recursos externos.
   if (pedido.method !== 'GET' || new URL(pedido.url).origin !== self.location.origin) return;
 
-  ev.respondWith(DESARROLLO ? redPrimero(pedido) : cachePrimero(pedido));
+  /*
+   * El reparto importa. Si el codigo y el contenido van cache-first, publicas
+   * una version nueva y el celu que ya tiene la app instalada sigue mostrando
+   * la vieja hasta que te acuerdes de subir la VERSION. Con red-primero ve lo
+   * ultimo cuando hay senial, y sigue andando igual cuando no la hay.
+   *
+   * Los estaticos que casi nunca cambian (css, iconos) van cache-first, que es
+   * lo que hace que la app abra al instante.
+   *
+   * En localhost todo va por red primero, para que una edicion no quede tapada.
+   */
+  const ruta = new URL(pedido.url).pathname;
+  const esCodigoOContenido =
+    pedido.mode === 'navigate' ||
+    /\.(html|js|json)$/.test(ruta) ||
+    ruta.endsWith('/');
+
+  ev.respondWith(
+    (DESARROLLO || esCodigoOContenido) ? redPrimero(pedido) : cachePrimero(pedido)
+  );
 });
 
 /** Produccion: si esta en cache se sirve al instante y no se toca la red. */

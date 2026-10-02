@@ -275,14 +275,109 @@ function render(schema, data) {
     html += `</div>`;
   });
 
-  salida.innerHTML = html;
+  return html;
+}
+
+/* --- Fichas de teoria --------------------------------------------------
+   Las fichas no tienen cuenta que recalcular, asi que lo que se valida es
+   otra cosa: que el contenido este completo y que las referencias cierren.
+   Un enlace roto o una ficha sin preguntas no rompe la app, pero deja un
+   agujero que no se nota hasta que lo pisas. */
+
+function validarFicha(f, schema, idsVistos, todosLosIds) {
+  const errores = [];
+  const advertencias = [];
+
+  chequearSchema(f, schema, '', errores);
+
+  if (f.id) {
+    if (idsVistos.has(f.id)) errores.push(`id duplicado: "${f.id}"`);
+    idsVistos.add(f.id);
+  }
+
+  (f.relacionado || []).forEach((r) => {
+    if (todosLosIds.indexOf(r) === -1) {
+      errores.push(`"relacionado" apunta a "${r}", que no existe`);
+    }
+    if (r === f.id) errores.push('la ficha se relaciona consigo misma');
+  });
+
+  if (!(f.preguntas || []).length) {
+    errores.push('sin preguntas: no se puede repasar');
+  }
+  (f.preguntas || []).forEach((p, i) => {
+    if (!p.p || !p.r) errores.push(`pregunta ${i + 1}: le falta el texto o la respuesta`);
+  });
+
+  // Una ficha de confianza baja sin decir a quien preguntarle es una queja
+  // sin salida: el que la lee queda sabiendo que no puede confiar y nada mas.
+  if (f.confianza === 'baja' && !f.verificar_con) {
+    errores.push('confianza baja pero no dice "verificar_con": hay que decir a quién preguntarle');
+  }
+
+  if (!(f.cuerpo || []).length) advertencias.push('sin cuerpo: sólo tiene resumen');
+  if (!(f.datos || []).length) advertencias.push('sin tabla de datos');
+  if (f.verificado === false) advertencias.push('sin verificar con una fuente');
+
+  return { f, errores, advertencias };
+}
+
+function renderFichas(schema, data) {
+  const fichas = data.fichas || [];
+  const ids = fichas.map((f) => f.id);
+  const idsVistos = new Set();
+  const resultados = fichas.map((f) => validarFicha(f, schema, idsVistos, ids));
+  const conError = resultados.filter((r) => r.errores.length);
+
+  const porArea = {};
+  resultados.forEach(({ f }) => {
+    const a = f.area || '?';
+    porArea[a] = porArea[a] || { total: 0, conf: {} };
+    porArea[a].total++;
+    porArea[a].conf[f.confianza] = (porArea[a].conf[f.confianza] || 0) + 1;
+  });
+
+  const preguntas = fichas.reduce((n, f) => n + (f.preguntas || []).length, 0);
+  const ok = conError.length === 0;
+
+  let html = `<h2>Fichas de teoría</h2>`;
+  html += `<div class="resumen ${ok ? 'ok' : 'bad'}">`;
+  html += `<div class="veredicto ${ok ? 'ok' : 'bad'}">`;
+  html += ok ? `OK — ${fichas.length} fichas, ${preguntas} preguntas, 0 errores`
+             : `${conError.length} ficha(s) con error, de ${fichas.length}`;
+  html += `</div>`;
+  html += `<table><tr><th>Área</th><th>Fichas</th><th>dato firme</th><th>valor típico</th><th>confirmar</th></tr>`;
+  Object.entries(porArea).forEach(([k, v]) => {
+    html += `<tr><td>${esc_(k)}</td><td>${v.total}</td>`
+         + `<td>${v.conf.alta || 0}</td><td>${v.conf.media || 0}</td><td>${v.conf.baja || 0}</td></tr>`;
+  });
+  html += `</table></div>`;
+
+  resultados.forEach(({ f, errores, advertencias }) => {
+    const clase = errores.length ? 'bad' : (advertencias.length ? 'warn' : '');
+    html += `<div class="item ${clase}">`;
+    html += `<span class="id">${esc_(f.id || '(sin id)')}</span> `;
+    html += `<span class="meta">${esc_(f.area || '?')} &middot; ${esc_(f.confianza || '?')} &middot; `
+         + `${(f.preguntas || []).length} preguntas &middot; `;
+    html += errores.length ? `<span style="color:var(--bad)">ERROR</span>` : `<span class="ok-tag">ok</span>`;
+    html += `</span>`;
+    errores.forEach((e) => { html += `<div class="err">✗ ${esc_(e)}</div>`; });
+    advertencias.forEach((a) => { html += `<div class="adv">! ${esc_(a)}</div>`; });
+    html += `</div>`;
+  });
+
+  return html;
 }
 
 Promise.all([
   fetch('../content/schema.json').then((r) => r.json()),
   fetch('../content/scenarios.json').then((r) => r.json()),
+  fetch('../content/schema-fichas.json').then((r) => r.json()),
+  fetch('../content/fichas.json').then((r) => r.json()),
 ])
-  .then(([schema, data]) => render(schema, data))
+  .then(([schema, data, schemaF, dataF]) => {
+    salida.innerHTML = render(schema, data) + renderFichas(schemaF, dataF);
+  })
   .catch((e) => {
     salida.innerHTML = `<div class="resumen bad"><div class="veredicto bad">No se pudieron cargar los archivos</div>`
       + `<div class="meta">${esc_(e.message)}</div>`

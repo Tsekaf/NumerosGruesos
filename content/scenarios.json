@@ -4,6 +4,7 @@
   "escenarios": [
     {
       "id": "margen-soja-001",
+      "ficha": "agr-conversiones-001",
       "categoria": "margen_bruto",
       "dificultad": 1,
       "verificado": false,
@@ -27,6 +28,7 @@
     },
     {
       "id": "margen-maiz-002",
+      "ficha": "agr-conversiones-001",
       "categoria": "margen_bruto",
       "dificultad": 2,
       "verificado": false,
@@ -51,6 +53,7 @@
     },
     {
       "id": "margen-trigo-003",
+      "ficha": "agr-conversiones-001",
       "categoria": "margen_bruto",
       "dificultad": 2,
       "verificado": false,
@@ -75,6 +78,7 @@
     },
     {
       "id": "equilibrio-soja-001",
+      "ficha": "agr-conversiones-001",
       "categoria": "punto_equilibrio",
       "dificultad": 1,
       "verificado": false,
@@ -98,6 +102,7 @@
     },
     {
       "id": "equilibrio-maiz-002",
+      "ficha": "agr-conversiones-001",
       "categoria": "punto_equilibrio",
       "dificultad": 2,
       "verificado": false,
@@ -122,6 +127,7 @@
     },
     {
       "id": "equilibrio-servicio-003",
+      "ficha": "agr-maquinaria-001",
       "categoria": "punto_equilibrio",
       "dificultad": 3,
       "verificado": false,
@@ -145,6 +151,7 @@
     },
     {
       "id": "conversion-acopio-001",
+      "ficha": "agr-conversiones-001",
       "categoria": "conversion_unidades",
       "dificultad": 1,
       "verificado": false,
@@ -167,6 +174,7 @@
     },
     {
       "id": "conversion-fertilizante-002",
+      "ficha": "agr-fertilizacion-001",
       "categoria": "conversion_unidades",
       "dificultad": 2,
       "verificado": false,
@@ -212,6 +220,7 @@
     },
     {
       "id": "costo-insumos-001",
+      "ficha": "agr-costos-001",
       "categoria": "costo_unitario",
       "dificultad": 1,
       "verificado": false,
@@ -235,6 +244,7 @@
     },
     {
       "id": "costo-recria-002",
+      "ficha": "gan-adp-001",
       "categoria": "costo_unitario",
       "dificultad": 3,
       "verificado": false,
@@ -313,6 +323,7 @@
     },
     {
       "id": "comprar-cosechadora-001",
+      "ficha": "agr-maquinaria-001",
       "categoria": "comprar_vs_alquilar",
       "dificultad": 3,
       "verificado": false,
@@ -339,6 +350,7 @@
     },
     {
       "id": "comprar-campo-002",
+      "ficha": "agr-arrendamiento-001",
       "categoria": "comprar_vs_alquilar",
       "dificultad": 2,
       "verificado": false,
@@ -358,6 +370,828 @@
       "criterio": { "metrica": "renta_pct", "bueno_min": 6, "malo_max": 3 },
       "respuesta_correcta": "ajustado",
       "explicacion": "14 qq son USD 371/ha de alquiler, que sobre 9.500 es una renta del 3,9% anual: 26 años de arrendamiento para recuperar la compra. Comparado con el alquiler puro es flojo, y ahi la decision deja de ser productiva y pasa a ser financiera: comprar campo se paga con la suba del valor de la tierra, no con la renta."
+    },
+
+    {
+      "id": "gan-desbaste-venta-001",
+      "categoria": "conversion_unidades",
+      "ficha": "gan-desbaste-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Vendes 80 novillos. En la balanza pesaron 420 kg promedio. Se pacto 4% de desbaste y USD 2,15 el kilo. El consignatario te liquida USD 65.800.",
+      "datos": {
+        "novillos": 80,
+        "peso_balanza_kg": 420,
+        "desbaste_pct": 4,
+        "precio_usd_kg": 2.15,
+        "liquidacion_usd": 65800
+      },
+      "pregunta": "¿Cierra la liquidacion?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "kg_balanza", "etiqueta": "Kilos de balanza", "expr": "novillos * peso_balanza_kg", "unidad": "kg", "decimales": 0 },
+        { "clave": "kg_facturados", "etiqueta": "Kilos despues del desbaste", "expr": "kg_balanza * (1 - desbaste_pct / 100)", "unidad": "kg", "decimales": 0 },
+        { "clave": "valor_real", "etiqueta": "Lo que deberia pagarte", "expr": "kg_facturados * precio_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio de la liquidacion", "expr": "(liquidacion_usd - valor_real) / valor_real * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "malo",
+      "explicacion": "El orden importa: primero se aplica el desbaste, despues se multiplica por el precio. 33.600 kg menos 4% son 32.256, y a USD 2,15 dan USD 69.350. Te liquidaron 65.800: faltan 3.550 dolares, un 5%. Si hubieras multiplicado primero por el precio y descontado despues te habria dado lo mismo, pero el error mas comun es otro: olvidarse del desbaste y pensar que 33.600 x 2,15 = 72.240 es lo que corresponde."
+    },
+
+    {
+      "id": "gan-costo-kilo-001",
+      "categoria": "costo_unitario",
+      "ficha": "gan-adp-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Compras novillitos de 250 kg a USD 2,60/kg. Los tenes 150 dias y ganan 0,75 kg por dia. Sanidad y suplementacion suman USD 38 por cabeza en todo el periodo. El gordo se paga USD 2,30/kg.",
+      "datos": {
+        "peso_entrada_kg": 250,
+        "precio_compra_usd_kg": 2.6,
+        "dias": 150,
+        "adp_kg_dia": 0.75,
+        "gasto_cabeza_usd": 38,
+        "precio_venta_usd_kg": 2.3
+      },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "kg_ganados", "etiqueta": "Kilos ganados", "expr": "adp_kg_dia * dias", "unidad": "kg", "decimales": 1 },
+        { "clave": "peso_salida", "etiqueta": "Peso de salida", "expr": "peso_entrada_kg + kg_ganados", "unidad": "kg", "decimales": 1 },
+        { "clave": "costo_compra", "etiqueta": "Costo de compra", "expr": "peso_entrada_kg * precio_compra_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_total", "etiqueta": "Costo total por cabeza", "expr": "costo_compra + gasto_cabeza_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_kg_final", "etiqueta": "Costo del kilo final", "expr": "costo_total / peso_salida", "unidad": "USD/kg", "decimales": 2 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre el costo del kilo", "expr": "(precio_venta_usd_kg - costo_kg_final) / costo_kg_final * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Compras a 2,60 y vendes a 2,30: mirado asi parece perdida segura, y es el error clasico. Pero el kilo que importa es el final: USD 688 de costo total sobre 362 kg de salida dan USD 1,90/kg, porque los 112 kg que engordo salieron muy baratos y te licuaron el precio de compra. En invernada mira siempre el costo del kilo de salida, nunca el precio de entrada."
+    },
+
+    {
+      "id": "gan-reposicion-001",
+      "categoria": "margen_bruto",
+      "ficha": "gan-negocios-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Invernada de terneros de 180 kg que vas a vender en 380 kg. Te los ofrecen a USD 3,40/kg. El gordo se paga USD 2,20/kg. Mantenerlos todo el ciclo (pasto, sanidad) cuesta USD 145 por cabeza.",
+      "datos": {
+        "peso_entrada_kg": 180,
+        "peso_salida_kg": 380,
+        "precio_ternero_usd_kg": 3.4,
+        "precio_gordo_usd_kg": 2.2,
+        "costo_ciclo_usd_cab": 145
+      },
+      "pregunta": "¿Cierra a ese precio de reposicion?",
+      "pasos": [
+        { "clave": "costo_compra", "etiqueta": "Costo del ternero", "expr": "peso_entrada_kg * precio_ternero_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_total", "etiqueta": "Costo total por cabeza", "expr": "costo_compra + costo_ciclo_usd_cab", "unidad": "USD", "decimales": 0 },
+        { "clave": "ingreso", "etiqueta": "Ingreso por cabeza", "expr": "peso_salida_kg * precio_gordo_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "margen_cab", "etiqueta": "Margen por cabeza", "expr": "ingreso - costo_total", "unidad": "USD", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_cab / costo_total * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Quedan USD 79 por cabeza, un 10%. El numero que decide no es el precio del gordo sino la relacion flaco/gordo: estas pagando 3,40 el kilo flaco para vender a 2,20 el kilo gordo. Cada 10 centavos mas en el ternero son USD 18 por cabeza que salen directo del margen, asi que el mismo negocio con el ternero a 3,60 ya te da apenas 4%. En invernada el resultado se define el dia que comprás, no el dia que vendés."
+    },
+
+    {
+      "id": "gan-carga-equilibrio-001",
+      "categoria": "punto_equilibrio",
+      "ficha": "gan-carga-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Alquilas 200 ha para invernada a USD 155/ha por año. Cada novillo que engordas deja USD 210 de margen por cabeza, ya descontada sanidad y suplementacion. El campo aguanta 0,8 novillos por hectarea.",
+      "datos": {
+        "hectareas": 200,
+        "arrendamiento_usd_ha": 155,
+        "margen_usd_cab": 210,
+        "carga_cab_ha": 0.8
+      },
+      "pregunta": "¿Tenes colchon sobre el punto de equilibrio?",
+      "etiquetas": ["Colchon comodo", "Justo", "No llega"],
+      "pasos": [
+        { "clave": "costo_total", "etiqueta": "Arrendamiento del año", "expr": "hectareas * arrendamiento_usd_ha", "unidad": "USD", "decimales": 0 },
+        { "clave": "cabezas_equilibrio", "etiqueta": "Cabezas para empatar", "expr": "costo_total / margen_usd_cab", "unidad": "cab", "decimales": 1 },
+        { "clave": "cabezas_posibles", "etiqueta": "Cabezas que entran", "expr": "hectareas * carga_cab_ha", "unidad": "cab", "decimales": 0 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(cabezas_posibles - cabezas_equilibrio) / cabezas_equilibrio * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Necesitas 148 novillos solo para pagar el arrendamiento y en el campo entran 160: un colchon del 8%, doce cabezas. Y ahi esta el problema, porque la receptividad no es un numero fijo: un año seco te baja la carga posible y te deja abajo del equilibrio sin que haya cambiado nada del contrato. En un alquiler ganadero, el colchon tiene que cubrir la variabilidad del pasto, no solo el numero del año promedio."
+    },
+
+    {
+      "id": "gan-criar-vs-comprar-001",
+      "categoria": "comprar_vs_alquilar",
+      "ficha": "gan-negocios-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Tenes 150 vacas de cria con 78% de destete. Mantener el rodeo te cuesta USD 330 por vaca por año, todo incluido. El ternero de 180 kg que producis vale lo mismo que uno comprado: USD 2,95/kg.",
+      "datos": {
+        "vacas": 150,
+        "tasa_destete_pct": 78,
+        "costo_vaca_anual_usd": 330,
+        "peso_ternero_kg": 180,
+        "precio_ternero_usd_kg": 2.95
+      },
+      "pregunta": "¿Conviene criar tus terneros o comprarlos?",
+      "etiquetas": ["Conviene criar", "Da igual", "Conviene comprar"],
+      "pasos": [
+        { "clave": "terneros", "etiqueta": "Terneros destetados", "expr": "vacas * tasa_destete_pct / 100", "unidad": "cab", "decimales": 0 },
+        { "clave": "costo_rodeo", "etiqueta": "Costo del rodeo", "expr": "vacas * costo_vaca_anual_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_propio", "etiqueta": "Costo de cada ternero propio", "expr": "costo_rodeo / terneros", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_comprado", "etiqueta": "Precio de un ternero comprado", "expr": "peso_ternero_kg * precio_ternero_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "ahorro_pct", "etiqueta": "Ahorro de criarlo", "expr": "(costo_comprado - costo_propio) / costo_comprado * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "ahorro_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Cada ternero propio te sale USD 423 contra USD 531 de uno comprado: un 20% mas barato. Pero ojo con lo que la cuenta no dice, que es la mitad de la decision: criar inmoviliza el capital de 150 vacas y ocupa el campo todo el año. La cuenta compara costos, no capital. Y hay una palanca escondida: con 85% de destete el mismo rodeo baja el costo por ternero a USD 388, asi que en cria la tasa de destete vale mas que casi cualquier ahorro de costos."
+    },
+
+    {
+      "id": "gan-esperar-o-vender-001",
+      "categoria": "roi_payback",
+      "ficha": "gan-adp-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Tenes 90 novillos en 400 kg listos para vender a USD 2,25/kg. Si los tenes 60 dias mas ganan 0,8 kg por dia, pero el gordo pesado se paga menos: USD 2,18/kg. Mantenerlos cuesta USD 0,55 por cabeza por dia.",
+      "datos": {
+        "novillos": 90,
+        "peso_actual_kg": 400,
+        "precio_hoy_usd_kg": 2.25,
+        "dias_extra": 60,
+        "adp_kg_dia": 0.8,
+        "precio_futuro_usd_kg": 2.18,
+        "costo_usd_cab_dia": 0.55
+      },
+      "pregunta": "¿Conviene esperar 60 dias mas?",
+      "etiquetas": ["Conviene esperar", "Ajustado", "Vender ahora"],
+      "pasos": [
+        { "clave": "ingreso_hoy", "etiqueta": "Si vendes hoy", "expr": "novillos * peso_actual_kg * precio_hoy_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "peso_futuro", "etiqueta": "Peso en 60 dias", "expr": "peso_actual_kg + adp_kg_dia * dias_extra", "unidad": "kg", "decimales": 0 },
+        { "clave": "ingreso_futuro", "etiqueta": "Si esperas", "expr": "novillos * peso_futuro * precio_futuro_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_extra", "etiqueta": "Costo de los 60 dias", "expr": "novillos * costo_usd_cab_dia * dias_extra", "unidad": "USD", "decimales": 0 },
+        { "clave": "ganancia_extra", "etiqueta": "Lo que ganas de mas", "expr": "ingreso_futuro - ingreso_hoy - costo_extra", "unidad": "USD", "decimales": 0 },
+        { "clave": "retorno_pct", "etiqueta": "Retorno en 60 dias", "expr": "ganancia_extra / ingreso_hoy * 100", "unidad": "%", "decimales": 1 },
+        { "clave": "retorno_anual", "etiqueta": "El mismo retorno, anualizado", "expr": "retorno_pct * 365 / dias_extra", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "retorno_anual", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Ganas USD 3.928 de mas, que sobre los 81.000 que cobrarias hoy es apenas 4,8% y suena a poco. El paso que cambia la lectura es anualizarlo: 4,8% en dos meses son casi 30% anual, y eso ya es otra conversacion. Cuando compares plazos cortos, anualizar siempre: un 5% en 60 dias y un 5% en un año no son el mismo negocio. Lo que si no entra en la cuenta es el riesgo de que el precio se mueva en esos 60 dias."
+    },
+
+    {
+      "id": "gan-tasa-destete-001",
+      "categoria": "costo_unitario",
+      "ficha": "gan-negocios-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Rodeo de cria de 200 vacas. El año seco te bajo el destete de 82% a 71%. Mantener el rodeo sigue costando lo mismo: USD 76.000 al año. El ternero de 180 kg se vende a USD 2,95/kg.",
+      "datos": {
+        "vacas": 200,
+        "destete_pct": 71,
+        "costo_rodeo_usd": 76000,
+        "peso_ternero_kg": 180,
+        "precio_usd_kg": 2.95
+      },
+      "pregunta": "¿Sigue cerrando el rodeo?",
+      "pasos": [
+        { "clave": "terneros", "etiqueta": "Terneros destetados", "expr": "vacas * destete_pct / 100", "unidad": "cab", "decimales": 0 },
+        { "clave": "costo_por_ternero", "etiqueta": "Costo de producir cada ternero", "expr": "costo_rodeo_usd / terneros", "unidad": "USD", "decimales": 0 },
+        { "clave": "valor_ternero", "etiqueta": "Lo que vale el ternero", "expr": "peso_ternero_kg * precio_usd_kg", "unidad": "USD", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre el costo", "expr": "(valor_ternero - costo_por_ternero) / costo_por_ternero * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Producir cada ternero te sale USD 535 y lo vendes a USD 531: estas perdiendo. Lo que hay que ver es por que. El costo del rodeo es practicamente fijo, porque mantenes las mismas 200 vacas rinda lo que rinda el año, asi que ese costo se reparte entre menos terneros. Con 82% de destete el mismo rodeo con los mismos costos daba casi 15% de margen. Once puntos de destete dieron vuelta el negocio sin que cambiara ni un precio."
+    },
+
+    {
+      "id": "gan-conversion-tropa-001",
+      "categoria": "conversion_unidades",
+      "ficha": "gan-desbaste-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "El comprador te dice: \"son 120 novillos de 380 kg, o sea 45 toneladas; a USD 2.180 la tonelada te doy USD 98.000\".",
+      "datos": {
+        "novillos": 120,
+        "peso_kg": 380,
+        "precio_usd_tn": 2180,
+        "oferta_usd": 98000
+      },
+      "pregunta": "¿Cierra la oferta?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "kg_totales", "etiqueta": "Kilos totales", "expr": "novillos * peso_kg", "unidad": "kg", "decimales": 0 },
+        { "clave": "toneladas", "etiqueta": "Toneladas de verdad", "expr": "kg_totales / 1000", "unidad": "tn", "decimales": 1 },
+        { "clave": "valor_real", "etiqueta": "Valor al precio que dijo", "expr": "toneladas * precio_usd_tn", "unidad": "USD", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio de la oferta", "expr": "(oferta_usd - valor_real) / valor_real * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Son 45,6 toneladas, no 45. Ese redondeo dicho al pasar son 600 kg, y a USD 2.180 la tonelada son USD 1.300. El precio que te dio es correcto y la conversion tambien, lo unico torcido es el redondeo: por eso pasa desapercibido. Regla practica: cuando alguien redondea en voz alta, fijate para que lado lo hizo."
+    },
+
+    {
+      "id": "gan-suplementacion-001",
+      "categoria": "roi_payback",
+      "ficha": "gan-adp-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Suplementar con grano cuesta USD 0,42 por cabeza por dia y te sube el aumento diario de 0,55 a 0,95 kg. Tenes 140 novillos y lo harias durante 90 dias. El kilo de novillo se paga USD 2,20.",
+      "datos": {
+        "novillos": 140,
+        "costo_suplemento_usd_cab_dia": 0.42,
+        "adp_actual_kg_dia": 0.55,
+        "adp_suplementado_kg_dia": 0.95,
+        "dias": 90,
+        "precio_usd_kg": 2.2
+      },
+      "pregunta": "¿Conviene suplementar?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "kg_extra_cab", "etiqueta": "Kilos extra por cabeza", "expr": "(adp_suplementado_kg_dia - adp_actual_kg_dia) * dias", "unidad": "kg", "decimales": 0 },
+        { "clave": "valor_extra_cab", "etiqueta": "Lo que valen esos kilos", "expr": "kg_extra_cab * precio_usd_kg", "unidad": "USD", "decimales": 1 },
+        { "clave": "costo_supl_cab", "etiqueta": "Lo que cuesta suplementar", "expr": "costo_suplemento_usd_cab_dia * dias", "unidad": "USD", "decimales": 1 },
+        { "clave": "margen_cab", "etiqueta": "Margen por cabeza", "expr": "valor_extra_cab - costo_supl_cab", "unidad": "USD", "decimales": 1 },
+        { "clave": "margen_total", "etiqueta": "Margen por los 140 novillos", "expr": "margen_cab * novillos", "unidad": "USD", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Retorno sobre lo gastado", "expr": "margen_cab / costo_supl_cab * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Lo unico que importa es el DIFERENCIAL: 0,4 kg extra por dia durante 90 dias son 36 kg, que a 2,20 valen USD 79. Suplementar cuesta USD 38. Cada dolar gastado te devuelve dos. El error tipico es comparar el costo del suplemento contra el valor de TODO lo que engorda el animal, que infla el resultado: los 0,55 kg diarios los ganaba igual sin gastar un peso."
+    },
+
+    {
+      "id": "margen-sorgo-004",
+      "categoria": "margen_bruto",
+      "ficha": "agr-conversiones-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Sorgo granifero en campo alquilado a USD 290/ha. Rinde 55 qq/ha, que es mucho, pero el precio esta en USD 120/tn. Costos directos USD 390/ha.",
+      "datos": { "rinde_qq_ha": 55, "precio_usd_tn": 120, "costos_directos_usd_ha": 390, "arrendamiento_usd_ha": 290 },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "ingreso_ha", "etiqueta": "Ingreso por ha", "expr": "rinde_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + arrendamiento_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen bruto por ha", "expr": "ingreso_ha - costo_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costo_ha * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "El rinde alto engaña: 55 quintales suenan a mucho, pero a USD 12 el quintal son USD 660, y entre costos y alquiler se van 680. Perdes plata rindiendo 55. El sorgo es barato de sembrar y aguanta lotes flojos, y por eso funciona en campo propio o de alquiler muy bajo; en un alquiler agricola normal el precio por tonelada no da."
+    },
+
+    {
+      "id": "margen-soja-segunda-005",
+      "categoria": "margen_bruto",
+      "ficha": "agr-rotacion-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Soja de segunda sobre un lote de trigo ya cosechado. Rinde 24 qq/ha, bastante menos que la de primera, y el precio es USD 270/tn. Los costos directos son USD 340/ha. El arrendamiento del lote ya lo cargo el trigo.",
+      "datos": { "rinde_qq_ha": 24, "precio_usd_tn": 270, "costos_directos_usd_ha": 340 },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "ingreso_ha", "etiqueta": "Ingreso por ha", "expr": "rinde_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen bruto por ha", "expr": "ingreso_ha - costos_directos_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costos_directos_usd_ha * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Rinde mucho menos que una soja de primera y aun asi deja mejor margen relativo. Todo el truco esta en lo que NO paga: el arrendamiento y el barbecho ya los cargo el trigo. Ese es el atractivo entero del doble cultivo, y es la razon por la que una soja de segunda floja puede convenir mas que una de primera buena en campo alquilado."
+    },
+
+    {
+      "id": "margen-invernada-ha-006",
+      "categoria": "margen_bruto",
+      "ficha": "gan-carga-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Invernada en campo alquilado a USD 190/ha por año. El campo aguanta 1,2 novillos por hectarea y cada novillo deja USD 180 de margen, ya descontados sanidad y suplementacion.",
+      "datos": { "carga_cab_ha": 1.2, "margen_usd_cab": 180, "arrendamiento_usd_ha": 190 },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "ingreso_ha", "etiqueta": "Margen ganadero por ha", "expr": "carga_cab_ha * margen_usd_cab", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen despues del alquiler", "expr": "ingreso_ha - arrendamiento_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre el alquiler", "expr": "margen_ha / arrendamiento_usd_ha * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "En ganaderia el margen por hectarea es siempre carga por margen por cabeza: 1,2 x 180 son USD 216, y el alquiler se lleva 190. Quedan 26. Lo util de verlo asi es que muestra las dos palancas: mas carga o mas margen por animal dan lo mismo en la cuenta, pero subir la carga depende del pasto y subir el margen depende del mercado."
+    },
+
+    {
+      "id": "margen-cria-ha-007",
+      "categoria": "margen_bruto",
+      "ficha": "gan-negocios-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Cria en campo alquilado a USD 160/ha. Carga 0,7 vacas por hectarea, destete del 80%, y el ternero de 180 kg se vende a USD 2,95/kg. Mantener cada vaca cuesta USD 210 al año.",
+      "datos": {
+        "carga_ev_ha": 0.7,
+        "destete_pct": 80,
+        "peso_ternero_kg": 180,
+        "precio_usd_kg": 2.95,
+        "costo_vaca_anual_usd": 210,
+        "arrendamiento_usd_ha": 160
+      },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "terneros_ha", "etiqueta": "Terneros por ha", "expr": "carga_ev_ha * destete_pct / 100", "unidad": "cab/ha", "decimales": 2 },
+        { "clave": "ingreso_ha", "etiqueta": "Ingreso por ha", "expr": "terneros_ha * peso_ternero_kg * precio_usd_kg", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_rodeo_ha", "etiqueta": "Costo del rodeo por ha", "expr": "carga_ev_ha * costo_vaca_anual_usd", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_ha", "etiqueta": "Costo total por ha", "expr": "costo_rodeo_ha + arrendamiento_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen por ha", "expr": "ingreso_ha - costo_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costo_ha * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Medida por hectarea, la cria da alrededor de USD 297 de ingreso. Comparalo con los USD 850 de un trigo y se entiende todo: la cria produce mucho menos por hectarea, asi que no aguanta un arrendamiento agricola. Con USD 160/ha ya estas en rojo. No es que sea mal negocio: es que solo cierra donde la tierra vale poco, y por eso en la zona la cria va a los bajos y la agricultura a lo alto."
+    },
+
+    {
+      "id": "margen-doble-cultivo-008",
+      "categoria": "margen_bruto",
+      "ficha": "agr-rotacion-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Doble cultivo en campo alquilado. Trigo: 38 qq/ha a USD 215/tn, costos USD 520/ha. Soja de segunda encima: 24 qq/ha a USD 270/tn, costos USD 340/ha. El arrendamiento es 14 qq de soja por ha y se paga una sola vez.",
+      "datos": {
+        "rinde_trigo_qq_ha": 38,
+        "precio_trigo_usd_tn": 215,
+        "costo_trigo_usd_ha": 520,
+        "rinde_soja_qq_ha": 24,
+        "precio_soja_usd_tn": 270,
+        "costo_soja_usd_ha": 340,
+        "arrendamiento_qq_ha": 14
+      },
+      "pregunta": "¿Cierra el paquete?",
+      "pasos": [
+        { "clave": "ingreso_trigo", "etiqueta": "Ingreso del trigo", "expr": "rinde_trigo_qq_ha * 0.1 * precio_trigo_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "ingreso_soja", "etiqueta": "Ingreso de la soja", "expr": "rinde_soja_qq_ha * 0.1 * precio_soja_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "ingreso_total", "etiqueta": "Ingreso de los dos", "expr": "ingreso_trigo + ingreso_soja", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "arriendo_ha", "etiqueta": "Arrendamiento en USD", "expr": "arrendamiento_qq_ha * 0.1 * precio_soja_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_total", "etiqueta": "Costo de los dos mas el alquiler", "expr": "costo_trigo_usd_ha + costo_soja_usd_ha + arriendo_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_ha", "etiqueta": "Margen por ha", "expr": "ingreso_total - costo_total", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre costos", "expr": "margen_ha / costo_total * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Hace la cuenta con el trigo solo y vas a ver el punto: 817 de ingreso contra 520 de costo mas 378 de arrendamiento dan PERDIDA de 81. El trigo solo no paga el alquiler. Es la soja de segunda la que hace viable el paquete, porque suma 648 de ingreso pagando solo sus propios costos. En campo alquilado, el doble cultivo no es una mejora del negocio: muchas veces es el negocio."
+    },
+
+    {
+      "id": "equilibrio-trigo-004",
+      "categoria": "punto_equilibrio",
+      "ficha": "agr-conversiones-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Trigo en campo alquilado. Costos directos USD 520/ha, arrendamiento USD 330/ha, precio USD 215/tn. Tu rinde esperado es 42 qq/ha.",
+      "datos": { "costos_directos_usd_ha": 520, "arrendamiento_usd_ha": 330, "precio_usd_tn": 215, "rinde_esperado_qq_ha": 42 },
+      "pregunta": "¿Tenes colchon sobre el punto de equilibrio?",
+      "etiquetas": ["Colchon comodo", "Justo", "No llega"],
+      "pasos": [
+        { "clave": "costo_total_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + arrendamiento_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "qq_equilibrio", "etiqueta": "Rinde de equilibrio", "expr": "costo_total_ha / (precio_usd_tn * 0.1)", "unidad": "qq/ha", "decimales": 1 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(rinde_esperado_qq_ha - qq_equilibrio) / qq_equilibrio * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Cada quintal vale USD 21,5, y USD 850 de costo dividido eso da 39,5 qq para empatar. Con 42 esperados el colchon es de dos quintales y medio, un 6%. En trigo eso es poco margen: es un cultivo donde una helada tardia o una lluvia en cosecha te mueven el rinde mas que ese 6%."
+    },
+
+    {
+      "id": "equilibrio-corral-005",
+      "categoria": "punto_equilibrio",
+      "ficha": "gan-adp-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Corral de engorde propio. Entre instalacion amortizada, mano de obra y energia, el costo fijo es USD 18.000 al año. Cada kilo que producis deja USD 0,35 de margen por encima del costo de alimentacion. Pensas engordar 200 novillos que ganan 130 kg cada uno.",
+      "datos": { "costo_fijo_anual_usd": 18000, "margen_usd_kg": 0.35, "novillos": 200, "kg_por_novillo": 130 },
+      "pregunta": "¿Alcanza para cubrir el costo fijo?",
+      "etiquetas": ["Sobra comodo", "Justo", "No alcanza"],
+      "pasos": [
+        { "clave": "kg_equilibrio", "etiqueta": "Kilos para empatar", "expr": "costo_fijo_anual_usd / margen_usd_kg", "unidad": "kg", "decimales": 0 },
+        { "clave": "kg_producidos", "etiqueta": "Kilos que vas a producir", "expr": "novillos * kg_por_novillo", "unidad": "kg", "decimales": 0 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(kg_producidos - kg_equilibrio) / kg_equilibrio * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Necesitas producir 51.400 kg y vas a producir 26.000: la mitad. Te faltan casi 200 novillos mas para empatar. El corral es el caso extremo de negocio de escala: el costo fijo no baja porque metas menos animales, asi que con poca hacienda cada kilo carga una porcion enorme y no hay margen de alimentacion que lo compense."
+    },
+
+    {
+      "id": "equilibrio-arrendamiento-006",
+      "categoria": "punto_equilibrio",
+      "ficha": "agr-arrendamiento-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Soja en campo alquilado a 16 qq por hectarea. La soja esta a USD 265/tn y los costos directos son USD 450/ha. Esperas 34 qq/ha.",
+      "datos": { "arrendamiento_qq_ha": 16, "precio_usd_tn": 265, "costos_directos_usd_ha": 450, "rinde_esperado_qq_ha": 34 },
+      "pregunta": "¿Tenes colchon sobre el punto de equilibrio?",
+      "etiquetas": ["Colchon comodo", "Justo", "No llega"],
+      "pasos": [
+        { "clave": "arriendo_usd_ha", "etiqueta": "Arrendamiento en USD", "expr": "arrendamiento_qq_ha * 0.1 * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "costo_total_ha", "etiqueta": "Costo total por ha", "expr": "costos_directos_usd_ha + arriendo_usd_ha", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "qq_equilibrio", "etiqueta": "Rinde de equilibrio", "expr": "costo_total_ha / (precio_usd_tn * 0.1)", "unidad": "qq/ha", "decimales": 1 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(rinde_esperado_qq_ha - qq_equilibrio) / qq_equilibrio * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Hay un atajo que conviene tener: como el alquiler ya esta en quintales, el equilibrio son 16 qq del arriendo mas los que cubren los USD 450 de costos directos, o sea 17 mas. Total 33. Con 34 esperados estas empatando con un quintal de sobra. El dato que asusta es que casi la mitad del rinde se va en pagar el campo antes de que ganes un peso."
+    },
+
+    {
+      "id": "equilibrio-silo-007",
+      "categoria": "punto_equilibrio",
+      "ficha": "agr-costos-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Pensas armar almacenaje propio. Amortizado son USD 9.500 al año mas USD 1.200 de mantenimiento. Te ahorra USD 9 por tonelada de gastos de acopio. Manejas 1.600 toneladas al año.",
+      "datos": { "amortizacion_anual_usd": 9500, "mantenimiento_anual_usd": 1200, "ahorro_usd_tn": 9, "toneladas_anuales": 1600 },
+      "pregunta": "¿Tenes volumen suficiente?",
+      "etiquetas": ["Sobra comodo", "Justo", "No alcanza"],
+      "pasos": [
+        { "clave": "costo_fijo", "etiqueta": "Costo fijo anual", "expr": "amortizacion_anual_usd + mantenimiento_anual_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "tn_equilibrio", "etiqueta": "Toneladas para empatar", "expr": "costo_fijo / ahorro_usd_tn", "unidad": "tn", "decimales": 0 },
+        { "clave": "colchon_pct", "etiqueta": "Colchon sobre el equilibrio", "expr": "(toneladas_anuales - tn_equilibrio) / tn_equilibrio * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "colchon_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Necesitas 1.189 toneladas para justificarlo y manejas 1.600: un 35% de colchon. Pero fijate que la cuenta solo mide el ahorro de acopio, y el almacenaje propio tiene una segunda ventaja que no aparece: te deja elegir cuando vender en vez de tener que entregar en cosecha, que es justo cuando el precio suele estar mas bajo."
+    },
+
+    {
+      "id": "costo-fertilizacion-003",
+      "categoria": "costo_unitario",
+      "ficha": "agr-fertilizacion-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Fertilizas con 180 kg/ha de un producto que sale USD 780 la tonelada. El rinde esperado es 45 qq/ha. En la zona dicen que se gasta USD 3,50 de fertilizante por quintal producido.",
+      "datos": { "dosis_kg_ha": 180, "precio_usd_tn": 780, "rinde_qq_ha": 45, "referencia_usd_qq": 3.5 },
+      "pregunta": "¿Estas bien contra la referencia?",
+      "etiquetas": ["Bien abajo", "Ajustado", "Estas caro"],
+      "pasos": [
+        { "clave": "costo_ha", "etiqueta": "Costo de fertilizar por ha", "expr": "dosis_kg_ha / 1000 * precio_usd_tn", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "costo_qq", "etiqueta": "Costo por quintal producido", "expr": "costo_ha / rinde_qq_ha", "unidad": "USD/qq", "decimales": 2 },
+        { "clave": "brecha_pct", "etiqueta": "Cuanto estas por debajo", "expr": "(referencia_usd_qq - costo_qq) / costo_qq * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "brecha_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "180 kg son 0,18 toneladas, y a USD 780 dan USD 140/ha. Repartido en 45 quintales son USD 3,12 por quintal contra 3,50 de referencia: un 12% abajo, dentro del ruido. Lo que hace util mirarlo por quintal y no por hectarea es que asi se pueden comparar lotes de rinde distinto: el mismo gasto por hectarea es carisimo en un lote de 25 qq y barato en uno de 60."
+    },
+
+    {
+      "id": "costo-tn-producida-004",
+      "categoria": "costo_unitario",
+      "ficha": "agr-costos-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Tu costo total del cultivo, con todo adentro (insumos, labores, arrendamiento, cosecha y flete), es USD 760/ha. El lote rindio 48 qq/ha y el grano se paga USD 255/tn.",
+      "datos": { "costo_total_usd_ha": 760, "rinde_qq_ha": 48, "precio_usd_tn": 255 },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "tn_ha", "etiqueta": "Toneladas por ha", "expr": "rinde_qq_ha * 0.1", "unidad": "tn/ha", "decimales": 1 },
+        { "clave": "costo_tn", "etiqueta": "Costo por tonelada producida", "expr": "costo_total_usd_ha / tn_ha", "unidad": "USD/tn", "decimales": 0 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre el costo", "expr": "(precio_usd_tn - costo_tn) / costo_tn * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "El costo por tonelada es el unico numero que se compara directo contra el precio, sin pasar por hectareas: producir te sale USD 158 la tonelada y la vendes a 255. Es tambien la mejor alarma que existe, porque si el costo por tonelada supera al precio no hay rinde que te salve: cuanto mas produzcas, mas perdes."
+    },
+
+    {
+      "id": "costo-kg-ternero-005",
+      "categoria": "costo_unitario",
+      "ficha": "gan-negocios-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Rodeo de cria: mantener cada vaca cuesta USD 260 al año y el destete es del 82%. El ternero sale de 175 kg y se vende a USD 2,95/kg.",
+      "datos": { "costo_vaca_anual_usd": 260, "destete_pct": 82, "peso_ternero_kg": 175, "precio_usd_kg": 2.95 },
+      "pregunta": "¿Es buen negocio?",
+      "pasos": [
+        { "clave": "terneros_por_vaca", "etiqueta": "Terneros por vaca", "expr": "destete_pct / 100", "unidad": "cab", "decimales": 2 },
+        { "clave": "costo_por_ternero", "etiqueta": "Costo de cada ternero", "expr": "costo_vaca_anual_usd / terneros_por_vaca", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_kg", "etiqueta": "Costo del kilo de ternero", "expr": "costo_por_ternero / peso_ternero_kg", "unidad": "USD/kg", "decimales": 2 },
+        { "clave": "margen_pct", "etiqueta": "Margen sobre el costo del kilo", "expr": "(precio_usd_kg - costo_kg) / costo_kg * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "margen_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "El paso que se saltea todo el mundo es el primero: el costo de la vaca no se divide por un ternero, se divide por 0,82, porque no todas parieron. Eso sube el costo de cada ternero de 260 a 317. Despues el kilo sale 1,81 contra 2,95 de venta. Si el destete cayera al 65%, el mismo costo daria USD 400 por ternero y el kilo se iria a 2,29."
+    },
+
+    {
+      "id": "costo-pulverizacion-006",
+      "categoria": "costo_unitario",
+      "ficha": "agr-maquinaria-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Pulverizadora propia. Combustible y mano de obra suman USD 4,20 por hectarea, y la maquina amortizada son USD 11.000 al año. Con repasos hacer unas 520 ha por año. El contratista cobra USD 9/ha.",
+      "datos": { "costo_variable_usd_ha": 4.2, "amortizacion_anual_usd": 11000, "hectareas_anuales": 520, "tarifa_contratista_usd_ha": 9 },
+      "pregunta": "¿A cuanto te sale la hectarea pulverizada?",
+      "etiquetas": ["Bien abajo", "Ajustado", "Estas caro"],
+      "pasos": [
+        { "clave": "amortizacion_ha", "etiqueta": "Amortizacion por ha", "expr": "amortizacion_anual_usd / hectareas_anuales", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "costo_propio_ha", "etiqueta": "Costo propio por ha", "expr": "costo_variable_usd_ha + amortizacion_ha", "unidad": "USD/ha", "decimales": 1 },
+        { "clave": "brecha_pct", "etiqueta": "Cuanto estas por debajo del contratista", "expr": "(tarifa_contratista_usd_ha - costo_propio_ha) / costo_propio_ha * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "brecha_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "El costo variable de USD 4,20 es menos de la mitad de lo que cobra el contratista, y por eso la maquina propia parece una ganga. Pero USD 11.000 repartidos en solo 520 ha son USD 21 por hectarea: la hectarea propia te sale USD 25,35 contra USD 9 del contratista. Con 2.500 ha la amortizacion bajaria a USD 4,40 y la cuenta se daria vuelta. Todo depende de la superficie, nunca del costo variable."
+    },
+
+    {
+      "id": "roi-aguada-003",
+      "categoria": "roi_payback",
+      "ficha": "gan-agua-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Hacer una aguada nueva en el fondo del campo sale USD 4.200. Habilita para pastoreo 60 ha que hoy los animales casi no usan porque les queda lejos del agua. Cada hectarea bien pastoreada deja USD 55 al año.",
+      "datos": { "inversion_usd": 4200, "hectareas_habilitadas": 60, "margen_usd_ha": 55 },
+      "pregunta": "¿Conviene la inversion?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "beneficio_anual", "etiqueta": "Beneficio anual", "expr": "hectareas_habilitadas * margen_usd_ha", "unidad": "USD", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Payback simple", "expr": "inversion_usd / beneficio_anual", "unidad": "años", "decimales": 1 },
+        { "clave": "roi_pct", "etiqueta": "ROI anual", "expr": "beneficio_anual / inversion_usd * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "Se paga en un año y tres meses. Las aguadas suelen ser la inversion de mejor retorno de un campo ganadero y la que mas se posterga, porque el problema no se ve: no hay animales muertos de sed, hay 60 hectareas que rinden la mitad de lo que podrian porque quedan lejos del agua."
+    },
+
+    {
+      "id": "roi-alambrado-004",
+      "categoria": "roi_payback",
+      "ficha": "gan-carga-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Subdividir un potrero de 120 ha en cuatro, con alambrado nuevo y una aguada por cuadro, sale USD 30.000. El pastoreo rotativo te permitiria subir la carga de 0,8 a 1,0 equivalente vaca por hectarea, y cada EV extra deja USD 95 al año.",
+      "datos": { "inversion_usd": 30000, "hectareas": 120, "carga_actual_ev_ha": 0.8, "carga_nueva_ev_ha": 1.0, "margen_usd_ev": 95 },
+      "pregunta": "¿Conviene la inversion?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "ev_extra", "etiqueta": "Equivalentes vaca que entran de mas", "expr": "(carga_nueva_ev_ha - carga_actual_ev_ha) * hectareas", "unidad": "EV", "decimales": 0 },
+        { "clave": "beneficio_anual", "etiqueta": "Beneficio anual", "expr": "ev_extra * margen_usd_ev", "unidad": "USD", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Payback simple", "expr": "inversion_usd / beneficio_anual", "unidad": "años", "decimales": 1 },
+        { "clave": "roi_pct", "etiqueta": "ROI anual", "expr": "beneficio_anual / inversion_usd * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "malo",
+      "explicacion": "La mejora es real —24 equivalentes vaca mas, un tercio de carga adicional sin comprar un metro de campo— y aun asi no cierra: USD 2.280 al año sobre 30.000 invertidos son 13 años de payback. Lo que decide no es si la mejora sirve, sino la relacion entre lo que rinde y lo que cuesta. La misma mejora con alambrado electrico simple, a una fraccion del costo, seria una de las mejores inversiones del campo."
+    },
+
+    {
+      "id": "roi-pastura-005",
+      "categoria": "roi_payback",
+      "ficha": "gan-adp-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Implantar una pastura sale USD 320/ha y dura cuatro años. En este lote, que viene con problemas de drenaje, esperas que suba el aumento diario de 0,45 a 0,50 kg durante los 200 dias al año que el animal la aprovecha. Tenes una cabeza por hectarea y el kilo se paga USD 2,20.",
+      "datos": { "inversion_usd_ha": 320, "adp_actual_kg_dia": 0.45, "adp_pastura_kg_dia": 0.5, "dias_aprovechados": 200, "precio_usd_kg": 2.2 },
+      "pregunta": "¿Conviene implantarla?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "kg_extra_ha", "etiqueta": "Kilos extra por ha y por año", "expr": "(adp_pastura_kg_dia - adp_actual_kg_dia) * dias_aprovechados", "unidad": "kg", "decimales": 0 },
+        { "clave": "beneficio_anual", "etiqueta": "Beneficio anual por ha", "expr": "kg_extra_ha * precio_usd_kg", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Payback simple", "expr": "inversion_usd_ha / beneficio_anual", "unidad": "años", "decimales": 1 },
+        { "clave": "roi_pct", "etiqueta": "ROI anual", "expr": "beneficio_anual / inversion_usd_ha * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Acá hay que comparar dos numeros: el payback da 14,5 años y la pastura dura 4. Se agota mucho antes de pagarse, asi que no hay forma de que cierre. En toda inversion que se consume, el payback tiene que ser bastante menor que la vida util, y esa comparacion es mas importante que el ROI: con la misma pastura llevando el aumento diario a 0,75 en vez de 0,50, el payback caeria a 2,4 años y seria un gran negocio. Lo que decide no es la pastura, es cuanto levanta el engorde en ESE lote."
+    },
+
+    {
+      "id": "roi-secadora-006",
+      "categoria": "roi_payback",
+      "ficha": "agr-calidad-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Una secadora propia sale USD 39.000. Pagar el secado en el acopio te cuesta USD 6,50 por tonelada y secas unas 1.100 toneladas al año. Operarla vos costaria USD 2.400 anuales entre energia y mano de obra.",
+      "datos": { "inversion_usd": 39000, "ahorro_usd_tn": 6.5, "toneladas_anuales": 1100, "costo_operar_anual_usd": 2400 },
+      "pregunta": "¿Conviene la inversion?",
+      "etiquetas": ["Conviene", "Ajustado", "No conviene"],
+      "pasos": [
+        { "clave": "ahorro_bruto", "etiqueta": "Lo que dejas de pagar", "expr": "toneladas_anuales * ahorro_usd_tn", "unidad": "USD", "decimales": 0 },
+        { "clave": "beneficio_anual", "etiqueta": "Beneficio neto anual", "expr": "ahorro_bruto - costo_operar_anual_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "payback_anios", "etiqueta": "Payback simple", "expr": "inversion_usd / beneficio_anual", "unidad": "años", "decimales": 1 },
+        { "clave": "roi_pct", "etiqueta": "ROI anual", "expr": "beneficio_anual / inversion_usd * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Ocho años de payback para una maquina que hay que mantener es flojo, y el volumen es el culpable: con 1.100 toneladas el ahorro anual no llega. Pero hay algo que la cuenta no ve y que a veces decide: secadora propia significa poder cosechar mas humedo y no esperar a que el lote se seque solo, y eso salva cosechas en años lluviosos."
+    },
+
+    {
+      "id": "comprar-pulverizadora-003",
+      "categoria": "comprar_vs_alquilar",
+      "ficha": "agr-maquinaria-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Pulverizas 1.800 ha por año contando repasos. El contratista cobra USD 9/ha. Una pulverizadora sale USD 55.000 y le das 10 años. Operarla cuesta USD 4,20/ha mas USD 1.900 al año de seguro y galpon.",
+      "datos": {
+        "hectareas_anuales": 1800,
+        "tarifa_contratista_usd_ha": 9,
+        "inversion_usd": 55000,
+        "vida_util_anios": 10,
+        "costo_operativo_usd_ha": 4.2,
+        "costo_fijo_anual_usd": 1900
+      },
+      "pregunta": "¿Conviene comprarla?",
+      "etiquetas": ["Conviene comprar", "Da igual", "Conviene contratar"],
+      "pasos": [
+        { "clave": "costo_contratista", "etiqueta": "Contratista, por año", "expr": "hectareas_anuales * tarifa_contratista_usd_ha", "unidad": "USD", "decimales": 0 },
+        { "clave": "amortizacion_anual", "etiqueta": "Amortizacion anual", "expr": "inversion_usd / vida_util_anios", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_propio_anual", "etiqueta": "Maquina propia, por año", "expr": "amortizacion_anual + hectareas_anuales * costo_operativo_usd_ha + costo_fijo_anual_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "ahorro_pct", "etiqueta": "Ahorro de comprar", "expr": "(costo_contratista - costo_propio_anual) / costo_contratista * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "ahorro_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Ahorras USD 1.240 al año sobre 16.200: menos del 8%. Por una diferencia asi no vale la pena inmovilizar USD 55.000 ni hacerse cargo de una maquina. Compara con la carta de la pulverizadora a 520 ha: la misma decision, con mas superficie, y el resultado cambia por completo."
+    },
+
+    {
+      "id": "comprar-silo-004",
+      "categoria": "comprar_vs_alquilar",
+      "ficha": "agr-costos-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "El acopio te cobra USD 11 por tonelada y por año de almacenaje. Armar almacenaje propio sale USD 48.000 y le das 15 años de vida, mas USD 1.500 anuales de mantenimiento. Manejas 1.900 toneladas.",
+      "datos": {
+        "tarifa_acopio_usd_tn": 11,
+        "toneladas_anuales": 1900,
+        "inversion_usd": 48000,
+        "vida_util_anios": 15,
+        "mantenimiento_anual_usd": 1500
+      },
+      "pregunta": "¿Conviene el almacenaje propio?",
+      "etiquetas": ["Conviene propio", "Da igual", "Conviene el acopio"],
+      "pasos": [
+        { "clave": "costo_acopio", "etiqueta": "Acopio, por año", "expr": "toneladas_anuales * tarifa_acopio_usd_tn", "unidad": "USD", "decimales": 0 },
+        { "clave": "amortizacion_anual", "etiqueta": "Amortizacion anual", "expr": "inversion_usd / vida_util_anios", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_propio_anual", "etiqueta": "Propio, por año", "expr": "amortizacion_anual + mantenimiento_anual_usd", "unidad": "USD", "decimales": 0 },
+        { "clave": "ahorro_pct", "etiqueta": "Ahorro de tenerlo propio", "expr": "(costo_acopio - costo_propio_anual) / costo_acopio * 100", "unidad": "%", "decimales": 0 }
+      ],
+      "criterio": { "metrica": "ahorro_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "USD 4.700 contra USD 20.900: ahorras casi el 78%. La diferencia con la maquinaria es la vida util, que es larga y no depende de cuanto lo uses. Un silo no se gasta por hacer hectareas, asi que la amortizacion anual es chica y la cuenta cierra desde volumenes mucho menores."
+    },
+
+    {
+      "id": "comprar-capitalizacion-005",
+      "categoria": "comprar_vs_alquilar",
+      "ficha": "gan-negocios-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Tenes 300 ha de campo ganadero y podes hacer dos cosas: poner hacienda propia, lo que requiere USD 210.000 de capital, o capitalizar hacienda de un tercero y quedarte con el 35% de la produccion sin poner un peso. El campo aguanta 1,1 cabezas por ha y cada una deja USD 175 de margen.",
+      "datos": {
+        "hectareas": 300,
+        "carga_cab_ha": 1.1,
+        "margen_usd_cab": 175,
+        "porcentaje_capitalizacion": 35,
+        "capital_hacienda_usd": 210000
+      },
+      "pregunta": "¿Conviene poner hacienda propia?",
+      "etiquetas": ["Conviene propia", "Ajustado", "Conviene capitalizar"],
+      "pasos": [
+        { "clave": "cabezas", "etiqueta": "Cabezas que entran", "expr": "hectareas * carga_cab_ha", "unidad": "cab", "decimales": 0 },
+        { "clave": "margen_propio", "etiqueta": "Margen con hacienda propia", "expr": "cabezas * margen_usd_cab", "unidad": "USD", "decimales": 0 },
+        { "clave": "margen_capitalizando", "etiqueta": "Margen capitalizando", "expr": "margen_propio * porcentaje_capitalizacion / 100", "unidad": "USD", "decimales": 0 },
+        { "clave": "diferencia", "etiqueta": "Lo que ganas de mas", "expr": "margen_propio - margen_capitalizando", "unidad": "USD", "decimales": 0 },
+        { "clave": "roi_pct", "etiqueta": "Retorno sobre el capital inmovilizado", "expr": "diferencia / capital_hacienda_usd * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "roi_pct", "bueno_min": 20, "malo_max": 8 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Poner hacienda propia te deja USD 37.500 mas por año, pero para eso inmovilizas USD 210.000: un retorno del 18% sobre ese capital. La pregunta correcta no es cual deja mas plata, que obviamente es la propia, sino si ese 18% te parece suficiente comparado con dejar el capital en otra cosa. Capitalizar es cobrar menos a cambio de no arriesgar capital ni bancar la mortandad."
+    },
+
+    {
+      "id": "comprar-camion-006",
+      "categoria": "comprar_vs_alquilar",
+      "ficha": "agr-maquinaria-001",
+      "dificultad": 3,
+      "verificado": false,
+      "enunciado": "Moves 2.400 toneladas por año al puerto. El flete contratado cuesta USD 18/tn. Un camion sale USD 95.000 y le das 8 años. El chofer son USD 19.000 al año y combustible mas mantenimiento USD 7 por tonelada transportada.",
+      "datos": {
+        "toneladas_anuales": 2400,
+        "flete_contratado_usd_tn": 18,
+        "inversion_usd": 95000,
+        "vida_util_anios": 8,
+        "chofer_anual_usd": 19000,
+        "costo_variable_usd_tn": 7
+      },
+      "pregunta": "¿Conviene el camion propio?",
+      "etiquetas": ["Conviene propio", "Da igual", "Conviene contratar"],
+      "pasos": [
+        { "clave": "costo_flete", "etiqueta": "Flete contratado, por año", "expr": "toneladas_anuales * flete_contratado_usd_tn", "unidad": "USD", "decimales": 0 },
+        { "clave": "amortizacion_anual", "etiqueta": "Amortizacion anual", "expr": "inversion_usd / vida_util_anios", "unidad": "USD", "decimales": 0 },
+        { "clave": "costo_propio_anual", "etiqueta": "Camion propio, por año", "expr": "amortizacion_anual + chofer_anual_usd + toneladas_anuales * costo_variable_usd_tn", "unidad": "USD", "decimales": 0 },
+        { "clave": "ahorro_pct", "etiqueta": "Ahorro de tenerlo propio", "expr": "(costo_flete - costo_propio_anual) / costo_flete * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "ahorro_pct", "bueno_min": 15, "malo_max": 0 },
+      "respuesta_correcta": "malo",
+      "explicacion": "El camion propio sale USD 47.675 contra USD 43.200 del flete contratado: un 10% mas caro. El chofer es el que lo hunde, porque es un costo fijo que pagas los doce meses aunque el camion solo trabaje en cosecha. Es la diferencia clave con una maquina agricola: la maquina no cobra sueldo cuando esta parada."
+    },
+
+    {
+      "id": "comprar-campo-simple-007",
+      "categoria": "comprar_vs_alquilar",
+      "ficha": "agr-arrendamiento-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Te ofrecen un campo agricola a USD 8.200/ha. En la zona el arrendamiento esta en USD 340/ha por año.",
+      "datos": { "precio_campo_usd_ha": 8200, "arrendamiento_usd_ha": 340 },
+      "pregunta": "¿Conviene comprar a ese precio?",
+      "etiquetas": ["Conviene comprar", "Ajustado", "Conviene alquilar"],
+      "pasos": [
+        { "clave": "payback_anios", "etiqueta": "Años de alquiler para pagarlo", "expr": "precio_campo_usd_ha / arrendamiento_usd_ha", "unidad": "años", "decimales": 1 },
+        { "clave": "renta_pct", "etiqueta": "Renta anual del campo", "expr": "arrendamiento_usd_ha / precio_campo_usd_ha * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "renta_pct", "bueno_min": 6, "malo_max": 3 },
+      "respuesta_correcta": "ajustado",
+      "explicacion": "Una renta del 4,1% son 24 años de alquiler para recuperar la compra. El atajo mental es directo: dividir el alquiler por el precio da la renta, y si el resultado no llega al 5% la compra no se paga con la produccion. Se paga con que la tierra valga mas despues, que es una apuesta distinta."
+    },
+
+    {
+      "id": "conversion-semilla-004",
+      "categoria": "conversion_unidades",
+      "ficha": "agr-conversiones-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "Sembras 240 ha con 62 kg de semilla por hectarea. La semilla viene en bolsas de 40 kg que salen USD 68 cada una. En el presupuesto te pusieron USD 24.000.",
+      "datos": { "hectareas": 240, "densidad_kg_ha": 62, "kg_por_bolsa": 40, "precio_usd_bolsa": 68, "presupuesto_usd": 24000 },
+      "pregunta": "¿Cierra el presupuesto?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "kg_totales", "etiqueta": "Kilos de semilla", "expr": "hectareas * densidad_kg_ha", "unidad": "kg", "decimales": 0 },
+        { "clave": "bolsas", "etiqueta": "Bolsas necesarias", "expr": "kg_totales / kg_por_bolsa", "unidad": "bolsas", "decimales": 0 },
+        { "clave": "costo_real", "etiqueta": "Lo que realmente cuesta", "expr": "bolsas * precio_usd_bolsa", "unidad": "USD", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio del presupuesto", "expr": "(presupuesto_usd - costo_real) / costo_real * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Son 14.880 kg, o sea 372 bolsas, que a USD 68 dan USD 25.296. El presupuesto esta USD 1.300 corto, un 5%. La cadena kilos a bolsas a pesos es corta pero tiene dos divisiones, y cada una es una oportunidad de redondear mal. Conviene hacerla siempre en ese orden y no saltar directo de hectareas a plata."
+    },
+
+    {
+      "id": "conversion-agroquimico-005",
+      "categoria": "conversion_unidades",
+      "ficha": "agr-conversiones-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Vas a aplicar 2,5 litros por hectarea en 320 ha. El producto viene en bidones de 20 litros. El vendedor te dice que con 35 bidones te alcanza.",
+      "datos": { "hectareas": 320, "dosis_litros_ha": 2.5, "litros_por_bidon": 20, "bidones_ofrecidos": 35 },
+      "pregunta": "¿Alcanza con esos bidones?",
+      "etiquetas": ["Alcanza", "Justo", "No alcanza"],
+      "pasos": [
+        { "clave": "litros_totales", "etiqueta": "Litros que necesitas", "expr": "hectareas * dosis_litros_ha", "unidad": "l", "decimales": 0 },
+        { "clave": "bidones_necesarios", "etiqueta": "Bidones que hacen falta", "expr": "litros_totales / litros_por_bidon", "unidad": "bidones", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Cuanto te falta", "expr": "(bidones_ofrecidos - bidones_necesarios) / bidones_necesarios * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "malo",
+      "explicacion": "Necesitas 800 litros, o sea 40 bidones exactos: te faltan 5, un 12%. Quedarte corto de agroquimico en plena aplicacion es peor que sobrar, porque la ventana de aplicacion es corta y parar a mitad de un lote significa volver a pasar. En insumos de aplicacion conviene errar para arriba."
+    },
+
+    {
+      "id": "conversion-rinde-kg-006",
+      "categoria": "conversion_unidades",
+      "ficha": "agr-conversiones-001",
+      "dificultad": 1,
+      "verificado": false,
+      "enunciado": "La cosechadora marco 5.280 kg/ha. El precio es USD 255/tn. El contratista te dice al pasar: \"son 52 quintales y pico, unos 1.340 dolares la hectarea\".",
+      "datos": { "kg_ha": 5280, "precio_usd_tn": 255, "estimacion_usd_ha": 1340 },
+      "pregunta": "¿Cierra la cuenta que te tiro?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "tn_ha", "etiqueta": "Toneladas por ha", "expr": "kg_ha / 1000", "unidad": "tn/ha", "decimales": 2 },
+        { "clave": "ingreso_real", "etiqueta": "Ingreso real por ha", "expr": "tn_ha * precio_usd_tn", "unidad": "USD/ha", "decimales": 0 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio de la estimacion", "expr": "(estimacion_usd_ha - ingreso_real) / ingreso_real * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "bueno",
+      "explicacion": "5.280 kg son 5,28 toneladas, que a USD 255 dan USD 1.346: el contratista calculo bien, se quedo a seis dolares. El atajo para verificarlo en el aire es correr la coma: 5.280 kg son 5,28 tn, y 5,28 por 255 se aproxima como 5 por 255 mas un cuarto de 255, o sea 1.275 mas 71."
+    },
+
+    {
+      "id": "conversion-hacienda-pesos-007",
+      "categoria": "conversion_unidades",
+      "ficha": "agr-conversiones-001",
+      "dificultad": 2,
+      "verificado": false,
+      "enunciado": "Te ofrecen $2.450 por kilo de novillo. El dolar esta a $1.185. Tu referencia para esa categoria es USD 2,20/kg.",
+      "datos": { "precio_ars_kg": 2450, "tipo_cambio": 1185, "referencia_usd_kg": 2.2 },
+      "pregunta": "¿Cierra la oferta con tu referencia?",
+      "etiquetas": ["Cierra", "Cerca", "No cierra"],
+      "pasos": [
+        { "clave": "precio_usd_kg", "etiqueta": "La oferta en dolares", "expr": "precio_ars_kg / tipo_cambio", "unidad": "USD/kg", "decimales": 2 },
+        { "clave": "desvio_pct", "etiqueta": "Desvio contra la referencia", "expr": "(precio_usd_kg - referencia_usd_kg) / referencia_usd_kg * 100", "unidad": "%", "decimales": 1 }
+      ],
+      "criterio": { "metrica": "desvio_pct", "bueno_min": -1, "malo_max": -5 },
+      "respuesta_correcta": "malo",
+      "explicacion": "2.450 dividido 1.185 da USD 2,07: un 6% abajo de tu referencia de 2,20. El atajo que evita la division es ir al reves: 2,20 por 1.185 son $2.607, que es lo que deberian ofrecerte. Cuando el precio viene en pesos y tu referencia esta en dolares, multiplicar la referencia es mas rapido y mas seguro que dividir la oferta."
     }
   ]
 }

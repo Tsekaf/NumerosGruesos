@@ -1,0 +1,1049 @@
+{
+  "version": 1,
+  "nota": "PRIMERA TANDA. Ninguna ficha está verificada todavía. Las de confianza 'alta' son aritmética o biología que no cambia; las 'media' son valores típicos que varían por establecimiento y año; las 'baja' son normativa o práctica que depende de una fuente oficial. En las volátiles se dice QUÉ existe y POR QUÉ, y se evitan a propósito los números que caducan.",
+  "fichas": [
+    {
+      "id": "agr-conversiones-001",
+      "area": "agricultura",
+      "tema": "conversiones",
+      "titulo": "El quintal y el rinde",
+      "zona": "general",
+      "confianza": "alta",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "nada que verificar: es aritmética",
+      "resumen": "1 quintal = 100 kg. De ahí sale todo lo demás.",
+      "cuerpo": [
+        "El quintal (qq) es la unidad con la que se habla de rinde en Argentina: 1 qq = 100 kg, entonces 1 tonelada = 10 qq. Cuando alguien dice \"me rindió 34\", quiere decir 34 qq/ha, o sea 3.400 kg/ha, o 3,4 tn/ha.",
+        "El precio en cambio casi siempre viene en dólares por tonelada. Esa asimetría —rinde en quintales, precio en toneladas— es la fuente de la mitad de los errores de cálculo mental en el campo. El puente es dividir por 10.",
+        "El atajo que conviene tener grabado: cada quintal vale el precio dividido 10. Si la soja está a USD 260/tn, cada quintal vale USD 26. Entonces 34 qq/ha son 34 × 26 = USD 884/ha, sin pasar por toneladas en ningún momento.",
+        "Ojo con un detalle que no es de conversión sino de comercialización: el grano se recibe con una humedad base, y si entregás más húmedo te descuentan peso. Los kilos que cosechás y los kilos que te pagan no son necesariamente los mismos."
+      ],
+      "datos": [
+        { "clave": "1 quintal", "valor": "100 kg" },
+        { "clave": "1 tonelada", "valor": "10 qq = 1.000 kg" },
+        { "clave": "Valor de 1 qq", "valor": "precio USD/tn ÷ 10" },
+        { "clave": "Humedad de recibo", "valor": "cada grano tiene la suya", "nota": "El porcentaje exacto te lo dice el acopio con el que operás." }
+      ],
+      "formula": {
+        "expresion": "ingreso USD/ha = rinde_qq_ha × 0,1 × precio_usd_tn",
+        "ejemplo": "34 qq/ha a USD 260/tn → 34 × 0,1 × 260 = USD 884/ha"
+      },
+      "preguntas": [
+        { "p": "¿Cuántos kilos tiene un quintal?", "r": "100 kg", "tipo": "recordar" },
+        { "p": "¿Cuántos quintales entran en una tonelada?", "r": "10", "tipo": "recordar" },
+        { "p": "La soja está a USD 280/tn. ¿Cuánto vale un quintal?", "r": "USD 28 — el precio dividido 10.", "tipo": "calcular" },
+        { "p": "Rendiste 42 qq/ha de maíz y el precio es USD 180/tn. ¿Cuánto es el ingreso por hectárea?", "r": "42 × 0,1 × 180 = USD 756/ha", "tipo": "calcular" }
+      ],
+      "relacionado": ["gan-desbaste-001"]
+    },
+
+    {
+      "id": "gan-desbaste-001",
+      "area": "ganaderia",
+      "tema": "comercializacion",
+      "titulo": "Desbaste",
+      "zona": "general",
+      "confianza": "alta",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo y el consignatario: el porcentaje que se pacta es cuestión de zona y de con quién operás",
+      "resumen": "El descuento de peso que se pacta al vender. Un punto de más son plata.",
+      "cuerpo": [
+        "El animal pierde peso entre que sale del campo y sube a la balanza: camina, se marea en el camión, no come ni toma durante el ayuno previo. Ese peso que se evapora se llama desbaste, y en lugar de discutirlo animal por animal se pacta de antemano como un porcentaje que se descuenta del peso.",
+        "La cuenta es directa: peso facturado = peso de balanza × (1 − desbaste). Con 4% de desbaste, un novillo de 400 kg se paga como 384 kg.",
+        "Por qué conviene tenerlo en la cabeza y no dejarlo pasar: en una tropa de 100 novillos de 400 kg son 40.000 kg totales, y cada punto porcentual son 400 kg. O sea que un punto de diferencia en lo que pactás equivale exactamente a un novillo entero. Es de las negociaciones donde el número chico esconde plata grande.",
+        "El porcentaje razonable depende de cuánto ayuno y cuánto viaje hay: a más horas sin comer y más kilómetros, más desbaste real."
+      ],
+      "datos": [
+        { "clave": "Qué se pacta", "valor": "un porcentaje de descuento sobre el peso" },
+        { "clave": "Cálculo", "valor": "peso facturado = peso balanza × (1 − desbaste)" },
+        { "clave": "Regla mental", "valor": "1 punto de desbaste en 100 novillos de 400 kg = 1 novillo" },
+        { "clave": "De qué depende", "valor": "horas de ayuno y kilómetros de viaje" }
+      ],
+      "formula": {
+        "expresion": "kg_facturados = kg_balanza × (1 − desbaste_pct ÷ 100)",
+        "ejemplo": "100 novillos de 420 kg con 4% → 42.000 × 0,96 = 40.320 kg facturados, 1.680 kg menos"
+      },
+      "preguntas": [
+        { "p": "¿Qué es el desbaste?", "r": "El porcentaje de peso que se descuenta al vender, para compensar lo que el animal pierde por ayuno y transporte.", "tipo": "recordar" },
+        { "p": "Un novillo pesa 450 kg en la balanza y se pactó 4% de desbaste. ¿Cuántos kilos se facturan?", "r": "450 × 0,96 = 432 kg", "tipo": "calcular" },
+        { "p": "En 120 novillos de 400 kg, ¿cuántos kilos hay entre pactar 3% y pactar 5%?", "r": "48.000 kg × 2% = 960 kg, casi dos novillos y medio.", "tipo": "calcular" },
+        { "p": "Te ofrecen mejor precio por kilo pero con 2 puntos más de desbaste. ¿Cómo decidís?", "r": "Comparando el total a cobrar, no el precio por kilo: 2 puntos son ~2% del peso, así que el precio tiene que subir más de 2% para que convenga.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-categorias-001", "agr-conversiones-001"]
+    },
+
+    {
+      "id": "gan-reproduccion-001",
+      "area": "ganaderia",
+      "tema": "reproduccion",
+      "titulo": "Gestación y ciclo de la vaca",
+      "zona": "general",
+      "confianza": "alta",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "los números base no necesitan verificación; el esquema de servicio sí depende del establecimiento",
+      "resumen": "283 días de gestación. Todo el calendario del rodeo sale de ahí.",
+      "cuerpo": [
+        "La gestación bovina dura alrededor de 283 días: nueve meses y diez días. Con ese número solo podés armar todo el calendario para atrás y para adelante, porque fija cuándo tenés que servir para parir cuando querés.",
+        "El ciclo estral es de 21 días. Por eso los servicios se piensan en múltiplos de 21: un servicio de 63 días le da a cada vaca tres oportunidades de quedar preñada.",
+        "El objetivo productivo clásico es un ternero por vaca por año, o sea un intervalo entre partos de 365 días. Como la gestación se lleva 283, quedan apenas 82 días después de parir para que la vaca vuelva a preñarse. Ese margen tan corto es la razón por la que importa tanto que llegue al servicio en buen estado corporal: si está flaca, no cicla, y se te fue el año.",
+        "El diagnóstico de preñez por tacto se hace unos 60 a 90 días después del servicio. Sirve para separar las vacías temprano y no gastar pasto en un animal que no va a parir."
+      ],
+      "datos": [
+        { "clave": "Gestación", "valor": "≈ 283 días (9 meses y 10 días)", "nota": "el rango normal va de 280 a 290" },
+        { "clave": "Ciclo estral", "valor": "21 días" },
+        { "clave": "Intervalo entre partos objetivo", "valor": "365 días" },
+        { "clave": "Días para reconcebir", "valor": "365 − 283 = 82 días después del parto" },
+        { "clave": "Tacto", "valor": "60 a 90 días después del servicio" }
+      ],
+      "preguntas": [
+        { "p": "¿Cuánto dura la gestación de una vaca?", "r": "Unos 283 días: nueve meses y diez días.", "tipo": "recordar" },
+        { "p": "¿Cada cuántos días cicla una vaca?", "r": "21 días.", "tipo": "recordar" },
+        { "p": "Si querés que paran en septiembre, ¿cuándo tenés que servir?", "r": "Unos 283 días antes, o sea alrededor de fin de noviembre o principio de diciembre.", "tipo": "calcular" },
+        { "p": "¿Cuántos días tiene la vaca para volver a preñarse si querés un ternero por año?", "r": "82 días: 365 − 283.", "tipo": "calcular" },
+        { "p": "Un servicio de 63 días, ¿cuántas chances de preñarse le da a cada vaca?", "r": "Tres, porque el ciclo es de 21 días.", "tipo": "calcular" },
+        { "p": "¿Por qué importa tanto el estado corporal de la vaca al servicio?", "r": "Porque si está flaca no cicla, y con sólo 82 días de margen se pierde el ternero del año.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-destete-001"]
+    },
+
+    {
+      "id": "gan-adp-001",
+      "area": "ganaderia",
+      "tema": "engorde",
+      "titulo": "Aumento diario de peso",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo: los valores que logran ustedes en campo natural y en isla son el número que importa, no el promedio de un manual",
+      "resumen": "Cuánto engorda por día. Es lo que te dice la fecha de venta.",
+      "cuerpo": [
+        "El aumento diario de peso (ADP, o ganancia diaria) es la cuenta más útil del engorde: peso ganado dividido días transcurridos. Con eso proyectás cuándo el animal llega al peso de venta, que es lo que te permite planificar en vez de vender a ojo.",
+        "La cuenta inversa es la que más se usa en la práctica: si un novillo está en 320 kg y lo querés vender en 420, te faltan 100 kg. A 0,7 kg por día son 143 días, casi cinco meses. Ahí ya sabés si llegás a la fecha que te conviene o no.",
+        "El ADP depende casi enteramente de lo que come. La misma hacienda sobre campo natural, sobre una pastura implantada o en corral da números muy distintos, y por eso los valores de referencia sirven sólo como orden de magnitud: el que vale es el que medís en tu campo.",
+        "En zona de islas hay un factor extra que no aparece en los manuales: la variabilidad. Un año de creciente o una seca cambian la oferta de pasto de un mes al otro, así que el promedio de la temporada puede esconder meses muy buenos y meses de pérdida de peso."
+      ],
+      "datos": [
+        { "clave": "Cálculo", "valor": "ADP = (peso final − peso inicial) ÷ días" },
+        { "clave": "Campo natural", "valor": "el más bajo de los tres", "nota": "Orden de magnitud: el número que vale es el que medís vos." },
+        { "clave": "Pastura implantada", "valor": "intermedio" },
+        { "clave": "Corral / feedlot", "valor": "el más alto, y el más caro" },
+        { "clave": "Lo que más lo mueve", "valor": "la comida: oferta de pasto y carga animal" }
+      ],
+      "formula": {
+        "expresion": "dias = (peso_objetivo − peso_actual) ÷ adp",
+        "ejemplo": "De 320 a 420 kg a 0,7 kg/día → 100 ÷ 0,7 = 143 días"
+      },
+      "preguntas": [
+        { "p": "¿Cómo se calcula el aumento diario de peso?", "r": "Peso ganado dividido los días que pasaron.", "tipo": "recordar" },
+        { "p": "Un novillo pasó de 280 a 395 kg en 180 días. ¿Cuál fue su ADP?", "r": "115 ÷ 180 = 0,64 kg/día", "tipo": "calcular" },
+        { "p": "Tenés terneros de 200 kg y querés venderlos a 380. Con 0,6 kg/día, ¿cuántos meses son?", "r": "180 ÷ 0,6 = 300 días, unos 10 meses.", "tipo": "calcular" },
+        { "p": "Medís el ADP de la tropa y te da la mitad de lo esperado. ¿Qué mirás primero?", "r": "La comida: oferta de pasto y carga animal. Después sanidad —parásitos— y agua.", "tipo": "criterio" },
+        { "p": "¿Por qué el ADP promedio de una temporada en isla puede engañar?", "r": "Porque promedia meses muy buenos con meses de creciente o seca en los que el animal pierde peso.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-categorias-001", "gan-destete-001"]
+    },
+
+    {
+      "id": "gan-destete-001",
+      "area": "ganaderia",
+      "tema": "reproduccion",
+      "titulo": "Destete",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo y el veterinario: cuándo destetan ustedes y por qué",
+      "resumen": "Sacarle el ternero a la vaca para que se recupere y vuelva a preñarse.",
+      "cuerpo": [
+        "Amamantar es lo que más energía le consume a una vaca. Mientras tiene el ternero al pie le cuesta mucho más recuperar estado corporal, y una vaca flaca no cicla. Por eso el destete no es sólo una decisión sobre el ternero: es sobre todo una herramienta para que la madre se vuelva a preñar en tiempo.",
+        "El destete convencional se hace alrededor de los seis a ocho meses. Es lo estándar cuando el año viene bien y las vacas llegan en buen estado.",
+        "El destete precoz adelanta la separación a los dos o tres meses. Se usa cuando las vacas están flacas o falta pasto: le sacás la carga a la madre justo cuando más le pesa. El costo es que el ternero pasa a necesitar una dieta cuidada, porque su rumen todavía no está del todo desarrollado.",
+        "En un año de creciente o de seca fuerte, el destete precoz es una de las pocas palancas rápidas que hay para salvar la preñez del año siguiente. Por eso conviene tenerlo presente como opción antes de que el año se ponga feo, y no cuando ya no hay margen."
+      ],
+      "datos": [
+        { "clave": "Destete convencional", "valor": "alrededor de los 6 a 8 meses", "nota": "Confirmá con la práctica del establecimiento." },
+        { "clave": "Destete precoz", "valor": "alrededor de los 2 a 3 meses" },
+        { "clave": "Para qué sirve", "valor": "que la vaca recupere estado y vuelva a ciclar" },
+        { "clave": "Contra del precoz", "valor": "el ternero necesita dieta cuidada: su rumen no está desarrollado" },
+        { "clave": "Cuándo es la palanca", "valor": "año de creciente o seca, para salvar la preñez siguiente" }
+      ],
+      "preguntas": [
+        { "p": "¿Por qué se desteta?", "r": "Para que la vaca deje de gastar energía en amamantar, recupere estado y vuelva a preñarse.", "tipo": "recordar" },
+        { "p": "¿Cuál es la diferencia entre destete convencional y precoz?", "r": "El convencional va alrededor de los 6 a 8 meses; el precoz adelanta a los 2 o 3.", "tipo": "recordar" },
+        { "p": "¿Cuándo conviene destetar precoz?", "r": "Cuando las vacas están flacas o falta pasto, para salvar la preñez del año que viene.", "tipo": "criterio" },
+        { "p": "¿Cuál es la contra del destete precoz?", "r": "El ternero necesita una dieta más cuidada porque su rumen no está desarrollado.", "tipo": "recordar" }
+      ],
+      "relacionado": ["gan-reproduccion-001", "gan-categorias-001"]
+    },
+
+    {
+      "id": "gan-categorias-001",
+      "area": "ganaderia",
+      "tema": "comercializacion",
+      "titulo": "Categorías y kilajes",
+      "zona": "general",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "Los cortes de kilaje varían según el mercado de referencia. Confirmá los números con tu viejo y con el consignatario; lo que sí es estable es la lógica de por qué existen dos sistemas.",
+      "resumen": "Cómo se nombra a cada animal. Ojo: hay dos sistemas distintos y conviven.",
+      "cuerpo": [
+        "Acá hay una trampa que conviene entender antes que cualquier número: existen dos formas paralelas de categorizar. SENASA clasifica por edad y dentición, para sanidad y movimiento de hacienda. El mercado clasifica por peso, para precio. No siempre coinciden, y cuando alguien dice \"novillito\" puede estar hablando de cualquiera de las dos.",
+        "En la práctica comercial los machos van: ternero, hasta el destete; novillito, la categoría liviana; novillo, el más pesado. Las hembras: ternera; vaquillona, la hembra joven que todavía no parió; vaca, la que ya parió. Y aparte el toro.",
+        "Los cortes de peso entre una categoría y otra son justamente lo que más varía: cambian por mercado, por año y por lo que esté demandando la exportación o el consumo interno. Por eso no los pongo acá: son el tipo de número que conviene que te diga el que compra.",
+        "Lo que sí es estable es la lógica: cuanto más liviano, más orientado al consumo interno; cuanto más pesado, más a exportación o a cuota. Esa es la razón de que los precios por kilo de cada categoría se muevan distinto, y de que a veces convenga vender antes o esperar."
+      ],
+      "datos": [
+        { "clave": "Los dos sistemas", "valor": "SENASA por edad y dentición · mercado por peso", "nota": "Esta distinción sí es estable." },
+        { "clave": "Machos", "valor": "ternero → novillito → novillo" },
+        { "clave": "Hembras", "valor": "ternera → vaquillona → vaca" },
+        { "clave": "Vaquillona vs. vaca", "valor": "la vaquillona no parió todavía; la vaca ya parió" },
+        { "clave": "Livianas vs. pesadas", "valor": "livianas al consumo interno, pesadas a exportación", "nota": "Por eso los precios por kilo se mueven distinto." }
+      ],
+      "preguntas": [
+        { "p": "¿Cuál es la diferencia entre una vaquillona y una vaca?", "r": "La vaquillona todavía no parió; la vaca ya parió.", "tipo": "recordar" },
+        { "p": "¿Por qué hay dos sistemas de categorías?", "r": "SENASA clasifica por edad y dentición para sanidad; el mercado por peso para precio.", "tipo": "recordar" },
+        { "p": "¿Por qué los precios por kilo se mueven distinto según la categoría?", "r": "Porque las livianas van más a consumo interno y las pesadas más a exportación, que son demandas distintas.", "tipo": "criterio" },
+        { "p": "¿A quién le confirmás los cortes de kilaje?", "r": "Al consignatario con el que operás: cambian por mercado y por año.", "tipo": "recordar" }
+      ],
+      "relacionado": ["gan-desbaste-001", "gan-adp-001"]
+    },
+
+    {
+      "id": "gan-sanidad-001",
+      "area": "ganaderia",
+      "tema": "sanidad",
+      "titulo": "Plan sanitario: el mapa, no el calendario",
+      "zona": "entre_rios",
+      "confianza": "baja",
+      "volatilidad": "revisar_campana",
+      "verificado": false,
+      "verificar_con": "SENASA y el veterinario del establecimiento. Esta ficha te dice qué existe y por qué, nunca cuándo: los calendarios cambian por campaña y una campaña perdida trae multa y problemas para mover hacienda.",
+      "resumen": "Qué enfermedades se vacunan y con qué lógica. Las fechas las da el veterinario.",
+      "cuerpo": [
+        "Empiezo por lo importante: esta ficha te dice QUÉ existe y POR QUÉ, no CUÁNDO. Los calendarios de vacunación obligatoria los fija SENASA, cambian por campaña y por zona, y equivocarse no es un error de cálculo sino un problema legal y de movimiento de hacienda. El cuándo se confirma con el veterinario, siempre.",
+        "Hay tres grupos que conviene tener separados en la cabeza. Primero, las obligatorias por ley: aftosa, con campañas nacionales y esquemas distintos según la categoría, y brucelosis, que va en las hembras jóvenes, en dosis única para toda la vida y aplicada por veterinario acreditado. El carbunclo también es obligatorio en varias jurisdicciones.",
+        "Segundo, las clostridiales: mancha, gangrena y enterotoxemia. No son obligatorias pero son casi universales, y en zonas bajas e inundables como las islas importan especialmente, porque las esporas clostridiales sobreviven bien en suelos húmedos y anegables. Para la zona de ustedes es probablemente el grupo más relevante de los tres.",
+        "Tercero, las reproductivas, que se aplican antes del servicio: IBR, BVD, campylobacter y leptospira. Apuntan a que no se pierdan preñeces. Aparte quedan las estacionales, como la queratoconjuntivitis, que aparece en verano.",
+        "Lo que sí es estable, y es lo que vale la pena que te quede, es la lógica de por qué cada grupo se aplica cuando se aplica. Las reproductivas van antes del servicio porque la inmunidad tiene que estar formada antes de que la vaca quede preñada: darlas después no sirve de nada. Las clostridiales se refuerzan antes de la época de más riesgo. Esa lógica no cambia aunque cambien las fechas."
+      ],
+      "datos": [
+        { "clave": "Obligatorias por ley", "valor": "aftosa, brucelosis, carbunclo", "nota": "El alcance y el calendario vigente los da SENASA." },
+        { "clave": "Clostridiales", "valor": "mancha, gangrena, enterotoxemia", "nota": "No obligatorias pero estándar. Las más relevantes en suelos bajos e inundables." },
+        { "clave": "Reproductivas", "valor": "IBR, BVD, campylobacter, leptospira" },
+        { "clave": "Por qué antes del servicio", "valor": "la inmunidad tiene que estar formada antes de la preñez" },
+        { "clave": "Brucelosis", "valor": "hembras jóvenes, dosis única de por vida, por veterinario acreditado" },
+        { "clave": "Estacionales", "valor": "queratoconjuntivitis, en verano" }
+      ],
+      "preguntas": [
+        { "p": "¿Cuáles son los tres grupos de vacunas?", "r": "Obligatorias por ley (aftosa, brucelosis, carbunclo), clostridiales (mancha, gangrena, enterotoxemia) y reproductivas (IBR, BVD, campylobacter, leptospira).", "tipo": "recordar" },
+        { "p": "¿Por qué las clostridiales importan especialmente en las islas?", "r": "Porque las esporas sobreviven bien en suelos húmedos y anegables.", "tipo": "recordar" },
+        { "p": "¿Por qué las reproductivas se dan ANTES del servicio?", "r": "Porque la inmunidad tiene que estar formada antes de que la vaca quede preñada: después ya no sirve.", "tipo": "criterio" },
+        { "p": "¿Qué tiene de particular la vacuna de brucelosis?", "r": "Va en hembras jóvenes, es dosis única de por vida y la aplica un veterinario acreditado.", "tipo": "recordar" },
+        { "p": "¿A quién le confirmás el calendario de vacunación de este año?", "r": "Al veterinario del establecimiento y a SENASA. Cambia por campaña.", "tipo": "recordar" }
+      ],
+      "relacionado": ["gan-reproduccion-001"]
+    },
+
+    {
+      "id": "agr-siembra-001",
+      "area": "agricultura",
+      "tema": "siembra",
+      "titulo": "Qué se siembra en la zona y cuándo",
+      "zona": "gualeguaychu_islas",
+      "confianza": "baja",
+      "volatilidad": "revisar_campana",
+      "verificado": false,
+      "verificar_con": "INTA (Concepción del Uruguay o Gualeguaychú) y el ingeniero agrónomo de la zona. Las ventanas de siembra se corren todos los años según cómo venga el agua.",
+      "resumen": "Soja, maíz, trigo y sorgo en el continental. Las islas son otro negocio.",
+      "cuerpo": [
+        "Primero la distinción que más importa para ustedes: la zona continental de Gualeguaychú y la de islas del Ibicuy no son el mismo negocio. El continental es agrícola-ganadero. Las islas son predominantemente ganaderas y forestales —sauce y álamo—, porque el riesgo de inundación hace muy arriesgada la agricultura de grano. Ceibas queda en el medio, en la transición.",
+        "En el continental el esquema típico es soja de primera, maíz, trigo y sorgo, con el doble cultivo trigo/soja de segunda como la rotación más común. El trigo se siembra en invierno, se cosecha en primavera, y sobre ese mismo lote entra la soja de segunda. Meter dos cultivos en un año en el mismo lote es lo que hace rendir la hectárea alquilada.",
+        "El orden del calendario sí conviene tenerlo claro, aunque las fechas exactas se muevan: el trigo va en invierno, la soja de primera y el maíz temprano en primavera, y la soja de segunda y el maíz tardío entrando el verano, después de la cosecha fina.",
+        "El maíz tardío se hizo común por una razón que vale la pena entender: sembrándolo más tarde, el período crítico del cultivo —cuando define el rinde— no cae en la seca de enero. Es cambiar rendimiento potencial por menos riesgo.",
+        "El clima de la zona es templado húmedo, bastante más generoso en lluvias que la pampa seca y repartidas a lo largo del año. La contracara es que el exceso de agua y el anegamiento son un problema tan real como la seca, y en las islas la creciente manda sobre todo lo demás."
+      ],
+      "datos": [
+        { "clave": "Continental (Gualeguaychú)", "valor": "soja 1ª y 2ª, maíz, trigo, sorgo" },
+        { "clave": "Islas del Ibicuy", "valor": "ganadería y forestación (sauce, álamo)", "nota": "La agricultura de grano es marginal por riesgo de inundación." },
+        { "clave": "Orden del calendario", "valor": "trigo en invierno → soja 1ª y maíz temprano en primavera → soja 2ª y maíz tardío entrando el verano", "nota": "Las fechas exactas las define cómo viene el agua. Las da el agrónomo." },
+        { "clave": "Doble cultivo", "valor": "trigo cosechado en primavera + soja de segunda sobre el mismo lote" },
+        { "clave": "Por qué maíz tardío", "valor": "para que el período crítico no caiga en la seca de enero" },
+        { "clave": "El riesgo de la zona", "valor": "tanto la seca como el exceso de agua y el anegamiento" }
+      ],
+      "preguntas": [
+        { "p": "¿Por qué las islas no son zona agrícola de grano?", "r": "Por el riesgo de inundación. Se usan para ganadería y forestación.", "tipo": "recordar" },
+        { "p": "¿Qué es el doble cultivo trigo/soja?", "r": "Sembrar trigo en invierno, cosecharlo en primavera, y sobre el mismo lote sembrar soja de segunda.", "tipo": "recordar" },
+        { "p": "¿Por qué se siembra maíz tardío?", "r": "Para que el período crítico del cultivo no caiga en la seca de enero. Se cambia rinde potencial por menos riesgo.", "tipo": "criterio" },
+        { "p": "¿Cuál es el problema climático de la zona que NO es la seca?", "r": "El exceso de agua y el anegamiento.", "tipo": "recordar" },
+        { "p": "¿En qué orden va el calendario de siembra?", "r": "Trigo en invierno, soja de primera y maíz temprano en primavera, soja de segunda y maíz tardío entrando el verano.", "tipo": "recordar" }
+      ],
+      "relacionado": ["agr-conversiones-001"]
+    },
+
+    {
+      "id": "gan-estado-001",
+      "area": "ganaderia",
+      "tema": "reproduccion",
+      "titulo": "Estado corporal",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el veterinario y tu viejo: qué escala usan ustedes y cuál es el umbral con el que trabajan",
+      "resumen": "Cuán gorda está la vaca. Es lo que más decide si se vuelve a preñar.",
+      "cuerpo": [
+        "El estado corporal es una forma de poner número a algo que se ve a ojo: cuánta reserva de grasa tiene el animal. Se mira y se palpa en los lugares donde la grasa se nota primero —costillas, lomo, base de la cola— y se lleva a una escala, que en Argentina suele ir de 1 a 5, donde 1 es un animal en los huesos y 5 uno excedido.",
+        "Por qué es la medida más importante del rodeo de cría: por debajo de cierto umbral la vaca directamente no cicla. No es que se preñe menos, es que no entra en celo. Y como vimos, después de parir hay apenas unos ochenta días de margen para volver a preñarse si querés un ternero por año.",
+        "Lo que conviene grabarse es que el momento que más manda es el parto. El estado con el que la vaca llega a parir predice mejor si se vuelve a preñar que lo que coma después, porque una vaca recién parida está en balance energético negativo: está dando leche y casi todo lo que come se va ahí. Engordarla después del parto es remar contra la corriente.",
+        "La consecuencia práctica es de calendario: la pelea por la preñez del año que viene se gana en los meses previos al parto, no en el servicio. Cuando llegás al servicio con las vacas flacas, ya es tarde y lo único que queda son parches como el destete precoz."
+      ],
+      "datos": [
+        { "clave": "Qué mide", "valor": "la reserva de grasa del animal" },
+        { "clave": "Dónde se mira", "valor": "costillas, lomo y base de la cola" },
+        { "clave": "Escala habitual", "valor": "de 1 a 5", "nota": "Confirmá cuál usan ustedes: hay otras escalas en uso." },
+        { "clave": "Por qué manda", "valor": "debajo de cierto umbral la vaca no cicla" },
+        { "clave": "El momento que decide", "valor": "el estado al parto, no el del servicio" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué mide el estado corporal y dónde se mira?", "r": "La reserva de grasa del animal. Se mira y palpa en costillas, lomo y base de la cola.", "tipo": "recordar" },
+        { "p": "¿Por qué una vaca flaca no se preña?", "r": "Porque por debajo de cierto umbral de estado corporal directamente no cicla: no entra en celo.", "tipo": "recordar" },
+        { "p": "¿Cuál es el momento en que el estado corporal más define la preñez siguiente?", "r": "El parto. Después la vaca está en balance energético negativo por la lactancia y cuesta mucho más recuperarla.", "tipo": "criterio" },
+        { "p": "Llegás al servicio con las vacas flacas. ¿Qué te queda?", "r": "Parches como el destete precoz. La pelea real se gana en los meses previos al parto.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-reproduccion-001", "gan-destete-001"]
+    },
+
+    {
+      "id": "gan-carga-001",
+      "area": "ganaderia",
+      "tema": "manejo",
+      "titulo": "Carga animal y equivalente vaca",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo: cuántos EV por hectárea manejan ustedes en el continental y en isla, que es un número propio de cada campo",
+      "resumen": "Cuántos animales entran por hectárea, y cómo se comparan animales distintos.",
+      "cuerpo": [
+        "Carga animal es cuántos animales tenés por hectárea. El problema obvio es que no todos los animales comen lo mismo: un ternero recién destetado y una vaca con cría al pie no son comparables, y sumarlos como si fueran uno y uno no dice nada.",
+        "Para eso existe el equivalente vaca (EV), que es una unidad de medida: una vaca de tamaño medio que pare y cría un ternero hasta el destete vale 1 EV, y todos los demás animales se expresan como fracción o múltiplo de eso según lo que requieren. Es poner a todos en la misma moneda para poder sumarlos.",
+        "Del otro lado está la receptividad: cuántos EV aguanta el campo por hectárea y por año sin degradarse. No es un número fijo del campo, es un número del campo en ese año, porque depende de cuánto pasto produjo.",
+        "El error clásico es cargar según el año bueno. Un campo que en un año llovido aguanta bien una carga determinada, en el siguiente no la aguanta, y como el pasto no se recupera de un mes para el otro, la sobrecarga de un año te la cobra el siguiente. Es de los pocos errores de manejo que se pagan con retraso.",
+        "En zona de islas esto se vuelve más extremo que en el continental: la receptividad no baja gradualmente, puede irse a cero con una creciente. La carga ahí no es sólo una decisión de pasto, es también una decisión de cuántos animales podés sacar a tiempo."
+      ],
+      "datos": [
+        { "clave": "Carga animal", "valor": "cuántos animales (o EV) por hectárea" },
+        { "clave": "Equivalente vaca (EV)", "valor": "la unidad: una vaca media que cría un ternero hasta el destete" },
+        { "clave": "Para qué sirve el EV", "valor": "poder sumar animales de distinto requerimiento" },
+        { "clave": "Receptividad", "valor": "cuántos EV aguanta el campo por ha y por año" },
+        { "clave": "No es fija", "valor": "depende del pasto de ese año, no sólo del campo" },
+        { "clave": "En isla", "valor": "puede irse a cero con una creciente" }
+      ],
+      "preguntas": [
+        { "p": "¿Para qué sirve el equivalente vaca?", "r": "Para poner en la misma unidad animales que comen distinto y poder sumarlos.", "tipo": "recordar" },
+        { "p": "¿Qué es la receptividad de un campo?", "r": "Cuántos equivalentes vaca aguanta por hectárea y por año sin degradarse.", "tipo": "recordar" },
+        { "p": "¿Por qué la receptividad no es un número fijo del campo?", "r": "Porque depende del pasto que produjo ese año, y eso cambia con el clima.", "tipo": "criterio" },
+        { "p": "¿Cuál es el problema de cargar según el año bueno?", "r": "Que la sobrecarga la paga el año siguiente: el pasto no se recupera de un mes al otro.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-adp-001", "gan-agua-001"]
+    },
+
+    {
+      "id": "gan-toros-001",
+      "area": "ganaderia",
+      "tema": "reproduccion",
+      "titulo": "Toros: cuántos y en qué estado",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el veterinario: el porcentaje que usan ustedes y cómo hacen la revisación pre-servicio",
+      "resumen": "En servicio natural, cuántos toros por vaca. Y por qué hay que revisarlos antes.",
+      "cuerpo": [
+        "En servicio natural la relación se expresa como porcentaje: cuántos toros cada cien vacas. El número exacto que conviene depende de varias cosas, y todas empujan en la misma dirección: cuanto más difícil le resulte al toro encontrar y servir a las vacas, más toros hacen falta.",
+        "Lo que lo mueve es la edad del toro —los toritos jóvenes tienen menos capacidad de servicio que uno adulto—, el tamaño del potrero, la topografía y si el servicio es corto o largo. Un potrero grande y quebrado necesita más toros que uno chico y parejo, con la misma cantidad de vacas.",
+        "Pero lo que de verdad importa acá no es el número, es la revisación previa. Un toro puede verse perfecto y ser infértil, o tener un problema de aparato locomotor que le impide servir, o traer una enfermedad venérea. Eso no se ve mirándolo desde el alambrado.",
+        "Y acá está el detalle que hace que valga la pena: el error se descubre tres meses tarde. Un toro que no sirve deja un grupo de vacas vacías, y vos te enterás recién en el tacto, cuando ya no hay nada que hacer con ese año. Por eso la revisación pre-servicio es de las prácticas con mejor relación entre lo que cuesta y lo que te puede evitar.",
+        "Es el mismo tipo de riesgo que el estado corporal: son decisiones que se toman antes, cuyo resultado se ve mucho después, y donde corregir a destiempo no sirve."
+      ],
+      "datos": [
+        { "clave": "Cómo se expresa", "valor": "porcentaje de toros sobre vacas" },
+        { "clave": "Qué lo sube", "valor": "toros jóvenes, potreros grandes, terreno quebrado, servicio corto" },
+        { "clave": "Revisación pre-servicio", "valor": "capacidad de servicio, aparato locomotor, sanidad reproductiva" },
+        { "clave": "Por qué importa tanto", "valor": "un toro que no sirve se descubre recién en el tacto, tres meses tarde" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué cosas hacen que necesites más toros para la misma cantidad de vacas?", "r": "Toros jóvenes, potreros grandes, terreno quebrado y servicios cortos.", "tipo": "recordar" },
+        { "p": "¿Qué se revisa en un toro antes del servicio?", "r": "Capacidad de servicio, aparato locomotor y sanidad reproductiva.", "tipo": "recordar" },
+        { "p": "¿Por qué la revisación pre-servicio paga tan bien?", "r": "Porque un toro infértil deja vacas vacías y te enterás recién en el tacto, cuando ya perdiste el año.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-reproduccion-001", "gan-estado-001"]
+    },
+
+    {
+      "id": "gan-parasitos-001",
+      "area": "ganaderia",
+      "tema": "sanidad",
+      "titulo": "Parásitos",
+      "zona": "entre_rios",
+      "confianza": "baja",
+      "volatilidad": "revisar_campana",
+      "verificado": false,
+      "verificar_con": "el veterinario. Qué producto usar, cada cuánto y en qué categoría es una decisión sanitaria concreta, no un dato de manual. Además hay zonas con lucha obligatoria contra la garrapata: eso lo define SENASA.",
+      "resumen": "El daño que no se ve. En zona húmeda pesan bastante más.",
+      "cuerpo": [
+        "Los parásitos se dividen en internos —los gastrointestinales, que viven en el aparato digestivo— y externos, como la garrapata, la mosca de los cuernos y los piojos. Los dos grupos hacen el mismo tipo de daño económico, aunque por vías distintas.",
+        "Por qué pesan más en una zona como la de ustedes: las larvas de los parásitos internos necesitan humedad y temperatura para sobrevivir en el pasto mientras esperan ser comidas. En una zona húmeda y templada esas condiciones se dan buena parte del año, así que la carga de larvas en la pastura es más alta que en una zona seca.",
+        "A quién afectan más: a los animales jóvenes. Las vacas adultas fueron desarrollando inmunidad a lo largo de la vida y toleran; la recría no, y es justo la categoría donde cada día de ganancia de peso cuenta.",
+        "Y acá está lo que hace difícil el tema: el daño es en su mayoría subclínico. No ves animales enfermos ni muertos; ves animales que ganan menos peso del que deberían. Es plata que se pierde sin hacer ruido, y por eso se subestima. Cuando ves el síntoma, ya perdiste mucho antes.",
+        "Una cosa que sí conviene entender aunque el esquema lo defina el veterinario: desparasitar siempre a ciegas y siempre con lo mismo genera resistencia, y cuando el producto deja de funcionar te quedás sin herramienta. Por eso existe el análisis de materia fecal, que mide la carga real antes de decidir si hace falta tratar. Es la diferencia entre medir y suponer."
+      ],
+      "datos": [
+        { "clave": "Internos", "valor": "gastrointestinales" },
+        { "clave": "Externos", "valor": "garrapata, mosca de los cuernos, piojos" },
+        { "clave": "Por qué la zona húmeda", "valor": "las larvas necesitan humedad y temperatura para sobrevivir en el pasto" },
+        { "clave": "A quién pega más", "valor": "a los animales jóvenes; los adultos tienen inmunidad" },
+        { "clave": "El daño típico", "valor": "subclínico: menos ganancia de peso, sin animales enfermos" },
+        { "clave": "Resistencia", "valor": "tratar a ciegas y siempre con lo mismo hace que el producto deje de servir" },
+        { "clave": "La alternativa", "valor": "análisis de materia fecal para medir antes de tratar" }
+      ],
+      "preguntas": [
+        { "p": "¿Por qué los parásitos internos pesan más en zona húmeda?", "r": "Porque las larvas necesitan humedad y temperatura para sobrevivir en el pasto, y ahí esas condiciones se dan buena parte del año.", "tipo": "recordar" },
+        { "p": "¿A qué categoría afectan más y por qué?", "r": "A los jóvenes, porque los adultos ya desarrollaron inmunidad.", "tipo": "recordar" },
+        { "p": "¿Por qué se subestima el daño parasitario?", "r": "Porque es subclínico: no ves animales enfermos, ves menos ganancia de peso.", "tipo": "criterio" },
+        { "p": "¿Cuál es el riesgo de desparasitar siempre a ciegas con el mismo producto?", "r": "Generar resistencia y quedarte sin herramienta cuando la necesites.", "tipo": "criterio" },
+        { "p": "¿Cómo se sabe si hace falta tratar, en vez de suponerlo?", "r": "Con análisis de materia fecal, que mide la carga parasitaria real.", "tipo": "recordar" }
+      ],
+      "relacionado": ["gan-sanidad-001", "gan-adp-001"]
+    },
+
+    {
+      "id": "gan-agua-001",
+      "area": "ganaderia",
+      "tema": "manejo",
+      "titulo": "El agua",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo: cómo están las aguadas en cada potrero y qué calidad tiene el agua, que en zona de isla varía mucho",
+      "resumen": "El insumo que no se factura y que limita la carga más que el pasto.",
+      "cuerpo": [
+        "Un bovino toma mucha agua por día, y bastante más en verano y cuando está en lactancia. Es el insumo más importante del sistema y el único que no aparece en ninguna planilla, justamente porque no se compra: como no se factura, no se cuenta.",
+        "El primer efecto es directo: si falta agua, el animal come menos. La ingesta de materia seca cae, y con ella la ganancia de peso y la producción de leche. Un animal con sed no engorda por más pasto que tenga alrededor.",
+        "El segundo efecto es de geometría, y es el que más se pasa por alto: la distancia a la aguada define qué parte del potrero se usa realmente. Si el animal tiene que caminar mucho para tomar, pastorea fuerte lo que está cerca del agua y deja desperdiciado lo lejano, además de gastar energía caminando. Un potrero grande con una sola aguada en la punta funciona, en la práctica, como un potrero más chico.",
+        "El tercero es la calidad. Agua con mucha sal o con determinados minerales reduce el consumo y la ganancia aun estando disponible. En zona de islas el agua puede ser abundante y a la vez de calidad variable, que es una combinación engañosa: está a la vista, parece resuelto, y no lo está.",
+        "El resumen práctico: un campo con buen pasto y mala aguada produce menos que uno con pasto regular y agua bien distribuida. Cuando la carga no da los números esperados, el agua es de las primeras cosas para mirar, antes que el pasto."
+      ],
+      "datos": [
+        { "clave": "Cuándo sube el consumo", "valor": "en verano y durante la lactancia" },
+        { "clave": "Si falta", "valor": "el animal come menos: cae la ingesta y la ganancia de peso" },
+        { "clave": "La distancia importa", "valor": "define qué parte del potrero se pastorea de verdad" },
+        { "clave": "La calidad también", "valor": "agua salada o con ciertos minerales baja el consumo aunque sobre" },
+        { "clave": "Por qué se olvida", "valor": "no se factura, entonces no aparece en ninguna planilla" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué le pasa a un animal al que le falta agua?", "r": "Come menos: cae la ingesta y con ella la ganancia de peso.", "tipo": "recordar" },
+        { "p": "¿Por qué importa la distancia a la aguada?", "r": "Porque define qué parte del potrero se pastorea realmente: lo lejano queda desperdiciado.", "tipo": "criterio" },
+        { "p": "¿Por qué el agua es el insumo que más se olvida?", "r": "Porque no se compra ni se factura, así que no aparece en ninguna planilla de costos.", "tipo": "criterio" },
+        { "p": "En isla el agua abunda. ¿Por qué igual puede ser un problema?", "r": "Porque la calidad varía, y agua salada o con ciertos minerales baja el consumo aunque esté disponible.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-carga-001", "gan-adp-001"]
+    },
+
+    {
+      "id": "gan-negocios-001",
+      "area": "ganaderia",
+      "tema": "comercializacion",
+      "titulo": "Cría, invernada y ciclo completo",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo: qué hacen ustedes en el continental y qué en isla, y por qué",
+      "resumen": "Tres negocios distintos con la misma hacienda. Cada uno se gana con otra cosa.",
+      "cuerpo": [
+        "Cría es producir terneros: tenés vacas, las servís, paren, y vendés el ternero al destete. El capital está inmovilizado en el rodeo de vacas y el ingreso llega una vez al año. Suele hacerse en campos que no darían para agricultura, porque la vaca de cría aprovecha pasto de menor calidad.",
+        "Invernada es comprar animales flacos y engordarlos para vender gordos. El ciclo es más corto, así que el capital rota más rápido, pero el negocio depende de algo que no controlás: la relación entre lo que pagás el kilo de flaco y lo que cobrás el kilo de gordo.",
+        "Ciclo completo es hacer las dos: criás tus propios terneros y los engordás vos. Te saca de encima la dependencia del mercado de reposición, que es la mayor incertidumbre de la invernada, a cambio de un ciclo más largo y más capital inmovilizado.",
+        "Lo que conviene tener claro es que cada uno se gana con una variable distinta. En cría el número que manda es la tasa de destete: cuántos terneros lográs por cada cien vacas. En invernada mandan dos: la relación de precios flaco/gordo y el aumento diario de peso. Son negocios que se parecen por fuera y se administran distinto.",
+        "En la zona de ustedes la geografía suele repartir los papeles: el continental permite cría, y las islas se prestan más a recría e invernada, porque el pasto es muy estacional y porque tener vacas preñadas en un lugar del que quizás haya que sacarlas de apuro por una creciente es un riesgo distinto al de tener novillos."
+      ],
+      "datos": [
+        { "clave": "Cría", "valor": "producir terneros y venderlos al destete" },
+        { "clave": "Invernada", "valor": "comprar flacos y vender gordos" },
+        { "clave": "Ciclo completo", "valor": "las dos cosas: criás y engordás lo tuyo" },
+        { "clave": "En cría manda", "valor": "la tasa de destete: terneros logrados cada cien vacas" },
+        { "clave": "En invernada manda", "valor": "la relación de precios flaco/gordo y el aumento diario de peso" },
+        { "clave": "Ventaja del ciclo completo", "valor": "no dependés del mercado de reposición" },
+        { "clave": "Su costo", "valor": "ciclo más largo y más capital inmovilizado" }
+      ],
+      "preguntas": [
+        { "p": "¿Cuál es la diferencia entre cría e invernada?", "r": "En cría producís terneros y los vendés al destete; en invernada comprás flacos y los vendés gordos.", "tipo": "recordar" },
+        { "p": "¿Qué variable manda en el negocio de cría?", "r": "La tasa de destete: cuántos terneros lográs cada cien vacas.", "tipo": "recordar" },
+        { "p": "¿De qué depende el resultado de una invernada?", "r": "De la relación entre el precio del kilo flaco y el del kilo gordo, y del aumento diario de peso.", "tipo": "recordar" },
+        { "p": "¿Qué te da y qué te cuesta el ciclo completo?", "r": "Te saca la dependencia del mercado de reposición, a cambio de un ciclo más largo y más capital inmovilizado.", "tipo": "criterio" },
+        { "p": "¿Por qué las islas se prestan más a invernada que a cría?", "r": "Por lo estacional del pasto y porque tener vacas preñadas en un lugar del que puede haber que salir por una creciente es un riesgo mayor.", "tipo": "criterio" }
+      ],
+      "relacionado": ["gan-adp-001", "gan-categorias-001", "gan-reproduccion-001"]
+    },
+
+    {
+      "id": "agr-rotacion-001",
+      "area": "agricultura",
+      "tema": "manejo",
+      "titulo": "Rotación: por qué no se hace soja sobre soja",
+      "zona": "general",
+      "confianza": "alta",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el ingeniero agrónomo, para la rotación concreta que conviene en cada lote",
+      "resumen": "El cultivo que más deja de plata no es el que más deja al suelo.",
+      "cuerpo": [
+        "La tentación es obvia: si la soja es la que mejor cierra, sembrar soja todos los años. El problema es que el resultado de un lote no se juega en una campaña, y hay tres cosas que se degradan cuando repetís el mismo cultivo.",
+        "La primera es el rastrojo. La soja deja poco y se descompone rápido; las gramíneas —maíz, trigo, sorgo— dejan mucho y tardan. Ese rastrojo es lo que cubre el suelo, frena el golpe de la lluvia y aporta carbono. En una zona con pendientes y lluvias fuertes como Entre Ríos, quedarse sin cobertura es quedarse sin defensa contra la erosión, que es un daño que no se revierte.",
+        "La segunda son las malezas. Cada cultivo se defiende de manera distinta y se maneja con herbicidas distintos. Si repetís cultivo, repetís herbicida, y eso es exactamente lo que selecciona malezas resistentes.",
+        "La tercera son las enfermedades y plagas del suelo, que son en buena medida específicas de cada cultivo: al repetirlo, el inóculo se acumula campaña tras campaña. Cambiar de cultivo rompe ese ciclo sin gastar un peso.",
+        "La forma de pensarlo: la rotación no es un costo que pagás por prolijidad, es una inversión en el rinde de los años siguientes. El monocultivo de soja rinde bien un tiempo y después empieza a pedir cada vez más insumos para sostener el mismo resultado."
+      ],
+      "datos": [
+        { "clave": "Qué deja la soja", "valor": "poco rastrojo, y se descompone rápido" },
+        { "clave": "Qué dejan las gramíneas", "valor": "mucho rastrojo, y tarda en descomponerse" },
+        { "clave": "Para qué sirve el rastrojo", "valor": "cubre el suelo, frena la erosión, aporta carbono" },
+        { "clave": "Lo que rompe la rotación", "valor": "el ciclo de malezas, enfermedades y plagas específicas" },
+        { "clave": "Por qué importa acá", "valor": "con pendiente y lluvias fuertes, la erosión no se revierte" }
+      ],
+      "preguntas": [
+        { "p": "¿Por qué el rastrojo de gramínea vale más que el de soja?", "r": "Porque es más abundante y tarda más en descomponerse: cubre el suelo más tiempo y aporta más carbono.", "tipo": "recordar" },
+        { "p": "¿Qué tres cosas se degradan con el monocultivo?", "r": "La cobertura de rastrojo, el control de malezas y la carga de enfermedades y plagas del suelo.", "tipo": "recordar" },
+        { "p": "¿Por qué repetir cultivo genera malezas resistentes?", "r": "Porque repetir cultivo lleva a repetir herbicida, y eso selecciona las malezas que sobreviven a ese modo de acción.", "tipo": "criterio" },
+        { "p": "¿Por qué la erosión es el riesgo más serio de quedarse sin cobertura en esta zona?", "r": "Porque con pendientes y lluvias fuertes el suelo que se va no vuelve.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-malezas-001", "agr-directa-001", "agr-siembra-001"]
+    },
+
+    {
+      "id": "agr-barbecho-001",
+      "area": "agricultura",
+      "tema": "manejo",
+      "titulo": "Barbecho",
+      "zona": "general",
+      "confianza": "alta",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el agrónomo: cuánto barbecho conviene y con qué se controla en cada caso",
+      "resumen": "Dejar el lote quieto y limpio para que junte agua antes de sembrar.",
+      "cuerpo": [
+        "El barbecho es el período entre que cosechás un cultivo y sembrás el siguiente, durante el cual el lote se deja sin cultivo a propósito. Parece tiempo perdido y es exactamente lo contrario: es cuando el lote se carga de agua.",
+        "La idea es simple. Toda planta que esté creciendo en el lote está consumiendo agua y nutrientes. Si en ese período no hay cultivo pero sí malezas, las malezas se toman el agua que vos querías guardar para la próxima siembra. Por eso el barbecho es sobre todo una tarea de control: mantener el lote limpio para que el perfil se llene.",
+        "El agua almacenada en el perfil al momento de sembrar es uno de los factores que más define el rinde, especialmente en cultivos de verano que van a atravesar el período seco. Es la diferencia entre llegar a enero con reserva o depender enteramente de que llueva justo.",
+        "El barbecho también deja que se mineralicen nutrientes del rastrojo, que quedan disponibles para el cultivo siguiente.",
+        "El error que conviene tener presente es dejar el barbecho sucio. Un lote con malezas durante el barbecho no sólo no acumula agua: además deja que esas malezas semillen, y el problema vuelve multiplicado la campaña siguiente."
+      ],
+      "datos": [
+        { "clave": "Qué es", "valor": "el período entre cosecha y siembra, con el lote sin cultivo" },
+        { "clave": "Para qué sirve", "valor": "acumular agua en el perfil y mineralizar nutrientes" },
+        { "clave": "La tarea real", "valor": "mantenerlo limpio de malezas" },
+        { "clave": "Por qué importa el agua guardada", "valor": "define el rinde del cultivo de verano cuando llega la seca" },
+        { "clave": "El error típico", "valor": "barbecho sucio: no junta agua y las malezas semillan" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué es el barbecho y para qué sirve?", "r": "El período entre cosecha y siembra en el que el lote se deja sin cultivo, para acumular agua en el perfil y mineralizar nutrientes.", "tipo": "recordar" },
+        { "p": "¿Por qué hay que mantener el barbecho limpio?", "r": "Porque las malezas consumen el agua que se quiere guardar para la siembra siguiente.", "tipo": "recordar" },
+        { "p": "¿Qué problema extra trae un barbecho sucio, además de perder agua?", "r": "Que las malezas semillan y el problema vuelve multiplicado en la campaña siguiente.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-malezas-001", "agr-rotacion-001", "agr-siembra-001"]
+    },
+
+    {
+      "id": "agr-directa-001",
+      "area": "agricultura",
+      "tema": "manejo",
+      "titulo": "Siembra directa",
+      "zona": "entre_rios",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el agrónomo de la zona: en lotes con pendiente el manejo de la cobertura tiene detalles propios",
+      "resumen": "Sembrar sin remover el suelo, sobre el rastrojo del cultivo anterior.",
+      "cuerpo": [
+        "En la siembra directa el suelo no se ara ni se rastrea: la sembradora abre apenas un surco, deposita la semilla y lo cierra, dejando todo el rastrojo del cultivo anterior en superficie. Es el sistema dominante en la agricultura argentina desde hace décadas.",
+        "Lo que se gana es sobre todo agua y suelo. El rastrojo en superficie reduce la evaporación, así que el perfil conserva más humedad, y amortigua el impacto de la gota de lluvia, que es lo que desagrega el suelo y arranca el proceso de erosión. Además se ahorra combustible y pasadas de maquinaria.",
+        "Para una zona con pendientes como el sur de Entre Ríos, esa protección contra la erosión hídrica no es un detalle: es probablemente el argumento más fuerte a favor del sistema.",
+        "Lo que se paga es dependencia de herbicidas. Sin labranza, la maleza que antes se enterraba ahora hay que controlarla químicamente, y ese uso intensivo y repetido es parte de por qué aparecieron las malezas resistentes. También puede aparecer compactación en los primeros centímetros, porque el suelo no se remueve nunca.",
+        "La conclusión práctica: la siembra directa no se sostiene sola. Funciona apoyada en rotación —que es la que aporta el rastrojo y rompe el ciclo de malezas— y en un manejo de herbicidas que no repita siempre lo mismo. Hacer directa con monocultivo de soja es quedarse con las contras del sistema y perder buena parte de las ventajas."
+      ],
+      "datos": [
+        { "clave": "Qué es", "valor": "sembrar sin remover el suelo, sobre el rastrojo" },
+        { "clave": "Lo que gana", "valor": "menos evaporación, menos erosión, menos gasoil y pasadas" },
+        { "clave": "Por qué importa acá", "valor": "en lotes con pendiente, protege contra la erosión hídrica" },
+        { "clave": "Lo que cuesta", "valor": "más dependencia de herbicidas; puede compactar la superficie" },
+        { "clave": "De qué depende que funcione", "valor": "de la rotación, que es la que aporta el rastrojo" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué es la siembra directa?", "r": "Sembrar sin arar ni rastrear: la sembradora abre un surco sobre el rastrojo del cultivo anterior.", "tipo": "recordar" },
+        { "p": "¿Cómo protege el rastrojo al suelo?", "r": "Reduce la evaporación y amortigua el impacto de la gota de lluvia, que es lo que inicia la erosión.", "tipo": "recordar" },
+        { "p": "¿Cuál es la principal contra del sistema?", "r": "La dependencia de herbicidas: sin labranza la maleza se controla químicamente.", "tipo": "recordar" },
+        { "p": "¿Por qué hacer siembra directa con monocultivo de soja es lo peor de los dos mundos?", "r": "Porque el rastrojo escaso no protege el suelo y el herbicida repetido selecciona resistencias: quedan las contras sin las ventajas.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-rotacion-001", "agr-malezas-001"]
+    },
+
+    {
+      "id": "agr-fertilizacion-001",
+      "area": "agricultura",
+      "tema": "insumos",
+      "titulo": "Fertilización: qué repone cada cosa",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el agrónomo y el análisis de suelo. Las dosis dependen del lote, del cultivo y del rinde objetivo: no hay receta general.",
+      "resumen": "Cada cosecha se lleva nutrientes del suelo. Fertilizar es reponerlos.",
+      "cuerpo": [
+        "Cada vez que te llevás granos del lote, te estás llevando también los nutrientes que ese grano contiene. Esa es la idea central y la que conviene tener clara antes que cualquier dosis: el suelo es una cuenta, la cosecha es una extracción, y la fertilización es el depósito.",
+        "Los tres que más se manejan. El nitrógeno es el que más demandan las gramíneas —maíz y trigo sobre todo— y es el que más define su rinde. La soja es un caso aparte: en simbiosis con bacterias fija nitrógeno del aire, así que no suele necesitarlo, y ése es uno de los motivos por los que aparece tan barata de sembrar.",
+        "El fósforo es distinto y es donde está el problema de fondo. Es poco móvil, se repone lento, y en buena parte de los suelos argentinos viene siendo extraído por encima de lo que se repone desde hace décadas. Es un descapitalización que no se ve en una campaña pero se acumula: el lote va perdiendo capacidad de respuesta año a año.",
+        "El azufre fue apareciendo como limitante a medida que se intensificó la agricultura y se dejaron de usar fertilizantes que lo aportaban como acompañante.",
+        "Lo que conviene entender del manejo económico: la decisión de fertilizar no es \"cuánto gasto\" sino \"cuánto rinde extra me devuelve\". Es una inversión con respuesta medible, y la respuesta depende de cuánto tiene el suelo, que es lo que dice el análisis. Fertilizar sin analizar es tirarle plata a un lote que quizás no lo necesita, o quedarse corto en uno que sí."
+      ],
+      "datos": [
+        { "clave": "La idea de fondo", "valor": "la cosecha extrae nutrientes; fertilizar los repone" },
+        { "clave": "Nitrógeno", "valor": "lo que más demandan las gramíneas (maíz, trigo)" },
+        { "clave": "La soja", "valor": "fija su propio nitrógeno del aire, en simbiosis con bacterias" },
+        { "clave": "Fósforo", "valor": "poco móvil y se viene extrayendo más de lo que se repone" },
+        { "clave": "Azufre", "valor": "apareció como limitante con la intensificación" },
+        { "clave": "Cómo se decide", "valor": "por respuesta esperada en rinde, con análisis de suelo" }
+      ],
+      "preguntas": [
+        { "p": "¿Cuál es la idea de fondo de la fertilización?", "r": "Que la cosecha se lleva nutrientes del suelo y hay que reponerlos: el suelo es una cuenta.", "tipo": "recordar" },
+        { "p": "¿Por qué la soja no necesita fertilización nitrogenada?", "r": "Porque fija nitrógeno del aire en simbiosis con bacterias.", "tipo": "recordar" },
+        { "p": "¿Por qué el fósforo es el problema de fondo?", "r": "Porque es poco móvil y se viene extrayendo por encima de lo que se repone: es una descapitalización que se acumula sin verse.", "tipo": "criterio" },
+        { "p": "¿Por qué fertilizar sin análisis de suelo es mala idea en los dos sentidos?", "r": "Porque podés gastar en un lote que no lo necesita, o quedarte corto en uno que sí.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-rotacion-001", "agr-costos-001"]
+    },
+
+    {
+      "id": "agr-malezas-001",
+      "area": "agricultura",
+      "tema": "insumos",
+      "titulo": "Malezas resistentes",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "el agrónomo: qué malezas resistentes hay en los lotes de ustedes y con qué se manejan",
+      "resumen": "Usar siempre el mismo herbicida selecciona las que sobreviven.",
+      "cuerpo": [
+        "En cualquier población de malezas hay individuos que, por variación natural, toleran un herbicida más que el resto. Mientras usás cosas distintas, esos individuos no tienen ventaja particular. Pero si aplicás siempre el mismo producto, todo lo demás muere y ellos se quedan con el lote entero para reproducirse. No es que el herbicida cree resistencia: la selecciona.",
+        "Ese es exactamente el camino que recorrió la agricultura argentina con el glifosato. Un producto barato, efectivo y fácil llevó a que se usara casi en exclusiva durante años, y el resultado previsible fue una tanda de malezas que ya no responden.",
+        "La consecuencia económica es progresiva y por eso engaña: no es que un día deja de funcionar. Primero hay que subir la dosis, después agregar otro producto, después hacer una pasada más. El costo de control por hectárea sube campaña tras campaña, y ese aumento no aparece como \"problema de malezas\" en ninguna planilla: aparece repartido en el costo de insumos.",
+        "Lo que baja la presión de selección es variar: rotar modos de acción —no marcas, modos de acción—, usar mezclas, rotar cultivos, y controlar temprano, cuando la maleza es chica y todavía responde. Un lote que se deja semillar una campaña carga el banco de semillas por varios años.",
+        "La forma útil de pensarlo: la sensibilidad de las malezas a los herbicidas es un recurso que se agota, como la fertilidad del suelo. Se administra, no se consume hasta el final."
+      ],
+      "datos": [
+        { "clave": "Cómo aparece", "valor": "el herbicida no crea resistencia: selecciona a los que ya la tenían" },
+        { "clave": "Qué la acelera", "valor": "usar siempre el mismo modo de acción" },
+        { "clave": "Cómo se nota en la plata", "valor": "sube la dosis, se agregan productos, se agregan pasadas" },
+        { "clave": "Por qué engaña", "valor": "el costo sube de a poco y queda escondido en \"insumos\"" },
+        { "clave": "Qué baja la presión", "valor": "rotar modos de acción, mezclas, rotar cultivos, controlar temprano" },
+        { "clave": "La analogía útil", "valor": "es un recurso que se agota, como la fertilidad" }
+      ],
+      "preguntas": [
+        { "p": "¿El herbicida crea la resistencia?", "r": "No: selecciona a los individuos que ya la tenían, al matar a todos los demás.", "tipo": "recordar" },
+        { "p": "¿Qué práctica acelera más la aparición de resistencia?", "r": "Usar siempre el mismo modo de acción.", "tipo": "recordar" },
+        { "p": "¿Por qué el problema de malezas resistentes es difícil de ver en los números?", "r": "Porque el costo sube de a poco —más dosis, más productos, más pasadas— y queda repartido dentro del costo de insumos.", "tipo": "criterio" },
+        { "p": "¿Qué pasa si dejás semillar un lote una campaña?", "r": "Que se carga el banco de semillas y el problema dura varios años.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-rotacion-001", "agr-barbecho-001", "agr-directa-001"]
+    },
+
+    {
+      "id": "agr-calidad-001",
+      "area": "agricultura",
+      "tema": "comercializacion",
+      "titulo": "Calidad de grano y descuentos",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "revisar_campana",
+      "verificado": false,
+      "verificar_con": "el acopio con el que operan: las bases de recibo, las tablas de merma y las bonificaciones se publican y cambian",
+      "resumen": "Los kilos que cosechás y los que te pagan no son los mismos.",
+      "cuerpo": [
+        "Cuando entregás granos, lo que se pesa en la balanza no es necesariamente lo que se te liquida. El grano se recibe contra un estándar, y las diferencias contra ese estándar se traducen en descuentos de peso o de precio. Es donde se pierde plata sin que nadie te avise.",
+        "El descuento más común es por humedad. Cada grano tiene una humedad base de recibo; si entregás más húmedo, te descuentan peso —porque parte de lo que pesaste era agua— y además te cobran el secado. Entregar muy seco tampoco conviene: esos kilos de agua que le faltan son kilos que podrías haber cobrado, y se secó en el lote a costa tuya.",
+        "También se descuenta por materia extraña —tierra, restos de planta, semillas de malezas— y por granos dañados o quebrados. Son descuentos que dependen bastante de cómo se hizo la cosecha y de en qué condiciones se guardó.",
+        "Y del otro lado están las bonificaciones. En trigo, el contenido de proteína puede sumar o restar según la tabla del comprador, y es la razón por la que dos lotes con el mismo rinde pueden liquidarse distinto. Ese premio depende de decisiones de manejo tomadas meses antes, sobre todo de la fertilización nitrogenada.",
+        "Lo que conviene sacar de acá: el precio que ves publicado es por grano en condición estándar. Tu precio efectivo es otro, y la diferencia se define en el momento de cosechar y almacenar, no en el momento de vender."
+      ],
+      "datos": [
+        { "clave": "Humedad", "valor": "cada grano tiene su base de recibo", "nota": "Los porcentajes exactos los publica el acopio; conviene tenerlos a mano." },
+        { "clave": "Si entregás húmedo", "valor": "descuento de peso más gasto de secado" },
+        { "clave": "Si entregás muy seco", "valor": "perdés kilos que podrías haber cobrado" },
+        { "clave": "Otros descuentos", "valor": "materia extraña, granos dañados y quebrados" },
+        { "clave": "Bonificación típica", "valor": "proteína en trigo" },
+        { "clave": "La idea", "valor": "el precio publicado es por grano estándar; el tuyo se define al cosechar" }
+      ],
+      "preguntas": [
+        { "p": "¿Por qué te descuentan peso si entregás grano húmedo?", "r": "Porque parte de lo que pesó era agua, y además hay que pagar el secado.", "tipo": "recordar" },
+        { "p": "¿Por qué tampoco conviene entregar muy seco?", "r": "Porque esos kilos de agua que le faltan son kilos que podrías haber cobrado: se secó en el lote a costa tuya.", "tipo": "criterio" },
+        { "p": "¿De qué depende la bonificación por proteína en trigo?", "r": "De decisiones de manejo tomadas meses antes, sobre todo de la fertilización nitrogenada.", "tipo": "criterio" },
+        { "p": "¿Por qué el precio publicado no es tu precio?", "r": "Porque es por grano en condición estándar, y los descuentos y bonificaciones se definen al cosechar y almacenar.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-conversiones-001", "agr-fertilizacion-001"]
+    },
+
+    {
+      "id": "agr-maquinaria-001",
+      "area": "agricultura",
+      "tema": "costos",
+      "titulo": "Máquina propia o contratista",
+      "zona": "general",
+      "confianza": "alta",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo y el contratista: las tarifas de la zona y qué labores conviene tercerizar",
+      "resumen": "El contratista convierte un costo fijo en variable. Eso es todo lo que hay que entender.",
+      "cuerpo": [
+        "Una máquina propia tiene dos clases de costo. Los fijos —amortización, seguro, galpón, parte del mantenimiento— los pagás exista o no exista trabajo. Los variables —combustible, mano de obra, reparación por uso— sólo aparecen cuando la usás.",
+        "El contratista, en cambio, es todo variable: le pagás por hectárea trabajada y nada más. Ésa es la diferencia esencial y de ahí sale todo lo demás.",
+        "La consecuencia es que la comparación depende enteramente de la superficie. La amortización dividida por las hectáreas que hacés es el número que decide: con pocas hectáreas, cada una carga una porción enorme del costo fijo y la máquina propia sale carísima; con muchas, esa porción se diluye y la propia empieza a convenir. Existe un umbral de hectáreas donde se cruzan las dos curvas.",
+        "El error clásico es comparar la tarifa del contratista contra el costo variable propio —el combustible y la mano de obra— y concluir que la propia es una ganga. Esa comparación deja afuera justamente el costo que hace la diferencia, que es el fijo.",
+        "Y hay dos cosas que la cuenta no captura y conviene poner arriba de la mesa: la máquina propia inmoviliza capital que podría estar en otra cosa, y te da oportunidad —sembrás o cosechás el día que corresponde, sin esperar que el contratista termine en otro campo. En una ventana de siembra corta o con lluvia encima, esa oportunidad a veces vale más que la diferencia de costo."
+      ],
+      "datos": [
+        { "clave": "Máquina propia", "valor": "costos fijos (amortización, seguro, galpón) + variables (combustible, mano de obra)" },
+        { "clave": "Contratista", "valor": "todo variable: se paga por hectárea trabajada" },
+        { "clave": "El número que decide", "valor": "la amortización dividida por las hectáreas que hacés" },
+        { "clave": "El error clásico", "valor": "comparar la tarifa contra el costo variable propio, olvidando el fijo" },
+        { "clave": "Lo que no está en la cuenta", "valor": "el capital inmovilizado y la oportunidad de trabajar el día justo" }
+      ],
+      "formula": {
+        "expresion": "costo_propio_por_ha = (amortizacion + costos_fijos) / hectareas + costo_variable_por_ha",
+        "ejemplo": "USD 24.000 de amortización sobre 380 ha son USD 63/ha sólo de amortización; sobre 900 ha son USD 27/ha"
+      },
+      "preguntas": [
+        { "p": "¿Cuál es la diferencia esencial entre máquina propia y contratista?", "r": "La propia tiene costos fijos que pagás uses o no; el contratista es todo variable, por hectárea trabajada.", "tipo": "recordar" },
+        { "p": "¿Qué número decide la comparación?", "r": "La amortización dividida por las hectáreas que hacés.", "tipo": "recordar" },
+        { "p": "¿Cuál es el error clásico al comparar?", "r": "Comparar la tarifa del contratista contra el costo variable propio, dejando afuera el costo fijo.", "tipo": "criterio" },
+        { "p": "Además del costo, ¿qué dos cosas hay que pesar?", "r": "El capital que queda inmovilizado en la máquina y la oportunidad de trabajar el día que corresponde sin esperar al contratista.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-costos-001", "agr-arrendamiento-001"]
+    },
+
+    {
+      "id": "agr-arrendamiento-001",
+      "area": "agricultura",
+      "tema": "costos",
+      "titulo": "Arrendamiento: cómo se paga y quién carga el riesgo",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo: cómo están pactados los campos que alquilan y en qué unidad",
+      "resumen": "La forma de pagar el alquiler define quién se come la mala campaña.",
+      "cuerpo": [
+        "Un arrendamiento se puede pactar de varias maneras, y la diferencia entre ellas no es sólo cuánto se paga: es quién carga con el riesgo si el año sale mal.",
+        "En quintales fijos por hectárea, el arrendatario se compromete a entregar una cantidad de grano, llueva o no llueva. Si el rinde se cae, el alquiler no baja: te toca igual. Todo el riesgo productivo es tuyo, y el dueño además queda expuesto al precio del grano, que puede subir o bajar.",
+        "En dólares fijos por hectárea, el dueño se saca de encima el riesgo de precio y también el productivo: cobra lo mismo pase lo que pase. Es la forma más segura para el que alquila el campo y la más riesgosa para el que lo trabaja.",
+        "A porcentaje de la cosecha, el riesgo se reparte: el dueño cobra una parte de lo que efectivamente salió, así que en un mal año cobra menos y en uno bueno cobra más. Es la forma que más alinea a las dos partes, y por eso suele venir acompañada de más control del dueño sobre cómo se maneja el lote.",
+        "Lo que conviene mirar cuando comparás dos alquileres no es sólo el número: el que parece más barato en quintales fijos puede ser el más caro en un año seco, que es justo el año en que menos margen tenés para absorberlo. Y en un campo alquilado el arrendamiento suele ser el costo más grande de todos, con lo cual pequeñas diferencias en cómo está pactado mueven mucho el resultado."
+      ],
+      "datos": [
+        { "clave": "Quintales fijos", "valor": "el riesgo productivo es del arrendatario; el de precio, del dueño" },
+        { "clave": "Dólares fijos", "valor": "el dueño no corre ningún riesgo; el arrendatario, todo" },
+        { "clave": "A porcentaje", "valor": "el riesgo se reparte y las partes quedan alineadas" },
+        { "clave": "Qué mirar al comparar", "valor": "no el número, sino cómo se comporta en un año malo" },
+        { "clave": "Por qué pesa tanto", "valor": "en campo alquilado suele ser el costo más grande de todos" }
+      ],
+      "preguntas": [
+        { "p": "En un arrendamiento en quintales fijos, ¿quién carga el riesgo si el rinde se cae?", "r": "El arrendatario: entrega la misma cantidad de grano llueva o no.", "tipo": "recordar" },
+        { "p": "¿Cuál de las tres formas reparte el riesgo entre las partes?", "r": "El porcentaje de la cosecha: el dueño cobra según lo que efectivamente salió.", "tipo": "recordar" },
+        { "p": "¿Por qué el alquiler más barato en el papel puede ser el peor?", "r": "Porque lo que importa es cómo se comporta en un año malo, que es cuando menos margen tenés para absorberlo.", "tipo": "criterio" },
+        { "p": "¿Por qué pequeñas diferencias en el arrendamiento mueven tanto el resultado?", "r": "Porque en un campo alquilado suele ser el costo más grande de todos.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-maquinaria-001", "agr-conversiones-001"]
+    },
+
+    {
+      "id": "agr-costos-001",
+      "area": "agricultura",
+      "tema": "costos",
+      "titulo": "El costo por hectárea",
+      "zona": "general",
+      "confianza": "media",
+      "volatilidad": "estable",
+      "verificado": false,
+      "verificar_con": "tu viejo y el agrónomo: cómo arman ustedes el costo por hectárea y qué incluyen",
+      "resumen": "La unidad con la que se compara todo. Lo importante es qué entra y qué no.",
+      "cuerpo": [
+        "El costo por hectárea es la unidad de cuenta de la agricultura: permite comparar lotes de distinto tamaño, campañas distintas y tu manejo contra el de la zona. Pero es una unidad tramposa, porque lo que mide depende enteramente de qué decidiste meter adentro.",
+        "Los costos directos son los que se atribuyen sin discusión al cultivo: semilla, fertilizante, agroquímicos y las labores. Es el número que se suele citar cuando alguien dice \"me salió tanto la hectárea\".",
+        "Pero hay tres que cambian el resultado por completo y a veces quedan afuera. El arrendamiento, que en campo alquilado suele ser el más grande de todos. El flete, que se paga por tonelada y por lo tanto crece con el rinde: rendir mucho también cuesta más. Y la cosecha, propia o de contratista.",
+        "De ahí que comparar tu costo por hectárea contra el de un vecino o contra un número de la zona no diga nada si no sabés qué incluye cada uno. Dos números que parecen medir lo mismo pueden estar midiendo cosas distintas, y la diferencia es más grande que cualquier ahorro que puedas hacer en insumos.",
+        "La regla práctica: cuando compares costos por hectárea, lo primero no es el número sino la lista de lo que entra."
+      ],
+      "datos": [
+        { "clave": "Para qué sirve", "valor": "comparar lotes, campañas y manejos entre sí" },
+        { "clave": "Costos directos", "valor": "semilla, fertilizante, agroquímicos, labores" },
+        { "clave": "Lo que suele quedar afuera", "valor": "arrendamiento, flete y cosecha" },
+        { "clave": "El flete", "valor": "se paga por tonelada, así que crece con el rinde" },
+        { "clave": "La regla", "valor": "antes de comparar números, comparar qué incluye cada uno" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué son los costos directos de un cultivo?", "r": "Semilla, fertilizante, agroquímicos y labores.", "tipo": "recordar" },
+        { "p": "¿Qué tres cosas suelen quedar afuera del costo por hectárea?", "r": "El arrendamiento, el flete y la cosecha.", "tipo": "recordar" },
+        { "p": "¿Por qué el flete crece con el rinde?", "r": "Porque se paga por tonelada: rendir más es también transportar más.", "tipo": "criterio" },
+        { "p": "¿Por qué comparar tu costo por hectárea con el de un vecino puede no decir nada?", "r": "Porque si no incluyen lo mismo, están midiendo cosas distintas.", "tipo": "criterio" }
+      ],
+      "relacionado": ["agr-fertilizacion-001", "agr-maquinaria-001", "agr-arrendamiento-001"]
+    },
+
+    {
+      "id": "imp-mapa-001",
+      "area": "impositivo",
+      "tema": "panorama",
+      "titulo": "El mapa: qué impuestos hay y de qué dependen",
+      "zona": "general",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "el contador. Esta ficha y todas las de esta sección son un mapa para saber qué preguntar, no una guía para decidir: las alícuotas, los mínimos, las exenciones y los plazos cambian todos los años y no están acá a propósito.",
+      "resumen": "Tres niveles de gobierno, y la diferencia entre los que cobran si ganás y los que cobran igual.",
+      "cuerpo": [
+        "Antes que cualquier número conviene tener el mapa. Los impuestos que toca un campo vienen de tres niveles: nacionales, provinciales y municipales. Los nacionales típicos son Ganancias, IVA y, si exportás, los derechos de exportación. Los provinciales son Ingresos Brutos y el Inmobiliario Rural. Los municipales son tasas por servicios, que varían mucho de un municipio a otro.",
+        "Pero la división que más sirve para entender el año no es por nivel de gobierno: es entre los que dependen del resultado y los que no.",
+        "Ganancias depende del resultado: si el ejercicio da pérdida, no hay impuesto. Ingresos Brutos, en cambio, se calcula sobre lo que facturás, no sobre lo que te queda, así que se paga aunque el año haya sido malo. Y el Inmobiliario Rural se paga por tener el campo, produzcas o no.",
+        "Esa distinción es la que explica por qué un año malo pega más fuerte de lo que sugiere el margen bruto: los costos impositivos que no dependen del resultado siguen ahí enteros, repartidos entre menos producción.",
+        "Lo otro que conviene entender desde el principio es que en el campo hay un desfasaje estructural entre cuándo gastás y cuándo cobrás. Gastás en insumos al sembrar y cobrás al vender, meses después. Varios de los mecanismos impositivos que parecen arbitrarios se entienden mejor mirándolos desde ahí: son el sistema tratando de cobrar antes de que vos hayas cobrado."
+      ],
+      "datos": [
+        { "clave": "Nacionales", "valor": "Ganancias, IVA, derechos de exportación" },
+        { "clave": "Provinciales", "valor": "Ingresos Brutos, Inmobiliario Rural" },
+        { "clave": "Municipales", "valor": "tasas por servicios, muy variables" },
+        { "clave": "Dependen del resultado", "valor": "Ganancias" },
+        { "clave": "Se pagan igual", "valor": "Ingresos Brutos (sobre facturación) e Inmobiliario (por tener el campo)" },
+        { "clave": "Por qué importa", "valor": "en un año malo, lo que no depende del resultado sigue entero" }
+      ],
+      "preguntas": [
+        { "p": "¿Cuáles son los impuestos provinciales que toca un campo?", "r": "Ingresos Brutos y el Inmobiliario Rural.", "tipo": "recordar" },
+        { "p": "¿Cuál es la división que más sirve para entender un año malo?", "r": "Entre los impuestos que dependen del resultado (Ganancias) y los que se pagan igual (Ingresos Brutos, Inmobiliario).", "tipo": "recordar" },
+        { "p": "¿Por qué un año malo pega más fuerte que lo que sugiere el margen bruto?", "r": "Porque los impuestos que no dependen del resultado siguen enteros y se reparten entre menos producción.", "tipo": "criterio" },
+        { "p": "¿Para qué sirve esta sección y para qué no?", "r": "Para saber qué preguntarle al contador. No para decidir: las alícuotas y los plazos cambian todos los años.", "tipo": "criterio" }
+      ],
+      "relacionado": ["imp-iva-001", "imp-iibb-001", "imp-inmobiliario-001", "imp-ganancias-001"]
+    },
+
+    {
+      "id": "imp-iva-001",
+      "area": "impositivo",
+      "tema": "iva",
+      "titulo": "IVA y el saldo a favor que no se usa",
+      "zona": "general",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "el contador: cómo está el saldo de ustedes y qué se puede hacer con él",
+      "resumen": "En el campo el IVA se acumula a favor, y eso es capital inmovilizado.",
+      "cuerpo": [
+        "El IVA funciona por diferencia. Cuando comprás algo pagás IVA: eso es tu crédito fiscal. Cuando vendés algo cobrás IVA: eso es tu débito. Al cierre de cada período pagás la diferencia, y si el crédito fue mayor que el débito te queda un saldo a favor.",
+        "En la mayoría de las actividades eso se empareja y el saldo a favor es circunstancial. En el agro no, y por una razón estructural: los insumos que comprás tributan a una alícuota y los granos que vendés tributan a una menor. Comprás caro en IVA y vendés barato en IVA, así que el crédito le gana al débito de forma sistemática.",
+        "El resultado es un saldo a favor que no para de crecer. Y acá está el problema, que no es contable sino financiero: ese saldo es plata tuya que está en manos del fisco y que no podés usar libremente. No es una pérdida en el balance, pero sí es capital inmovilizado, igual que un silo lleno que no vendés. En una actividad donde el capital de trabajo es grande y el ciclo es largo, eso pesa.",
+        "Hay además un segundo mecanismo que empuja en la misma dirección: en muchas operaciones el comprador te retiene una parte del IVA al pagarte. Esas retenciones son pagos a cuenta —no son un impuesto extra— pero adelantan plata y engordan todavía más el saldo a favor.",
+        "Lo que conviene saber es que existen caminos para recuperar o aplicar ese saldo, y que cuáles están disponibles y con qué requisitos es exactamente el tipo de cosa que cambia. Eso es una conversación con el contador, y vale la pena tenerla: no es un detalle administrativo, es plata."
+      ],
+      "datos": [
+        { "clave": "Cómo funciona el IVA", "valor": "débito por lo que vendés menos crédito por lo que comprás" },
+        { "clave": "Por qué se acumula en el agro", "valor": "los insumos tributan a una alícuota mayor que los granos" },
+        { "clave": "Qué es el saldo a favor", "valor": "plata tuya en manos del fisco, que no podés usar libremente" },
+        { "clave": "Por qué importa", "valor": "no es pérdida contable, pero sí capital inmovilizado" },
+        { "clave": "Las retenciones de IVA", "valor": "pagos a cuenta que adelantan plata y engordan el saldo" }
+      ],
+      "preguntas": [
+        { "p": "¿Cómo se calcula lo que se paga de IVA?", "r": "Por diferencia: el débito de lo que vendiste menos el crédito de lo que compraste.", "tipo": "recordar" },
+        { "p": "¿Por qué en el agro el saldo de IVA se acumula a favor?", "r": "Porque los insumos tributan a una alícuota mayor que los granos: el crédito le gana al débito de forma sistemática.", "tipo": "recordar" },
+        { "p": "¿Por qué un saldo a favor es un problema si no es una pérdida?", "r": "Porque es capital inmovilizado: plata tuya que está en manos del fisco y no podés usar.", "tipo": "criterio" },
+        { "p": "Una retención de IVA, ¿es un impuesto extra?", "r": "No, es un pago a cuenta. Pero adelanta plata y engorda el saldo a favor.", "tipo": "recordar" }
+      ],
+      "relacionado": ["imp-mapa-001", "imp-retenciones-001", "imp-condicion-001"]
+    },
+
+    {
+      "id": "imp-retenciones-001",
+      "area": "impositivo",
+      "tema": "retenciones",
+      "titulo": "Retenciones: dos cosas distintas con el mismo nombre",
+      "zona": "general",
+      "confianza": "baja",
+      "volatilidad": "revisar_campana",
+      "verificado": false,
+      "verificar_con": "el contador. Los derechos de exportación cambian por decreto y pueden moverse de un mes al otro: nunca dar por vigente un número que leíste en algún lado.",
+      "resumen": "Los derechos de exportación te bajan el precio. Las retenciones impositivas te las devuelven.",
+      "cuerpo": [
+        "En el campo la palabra retención significa dos cosas completamente distintas, y confundirlas lleva a conclusiones equivocadas sobre la propia rentabilidad.",
+        "Las primeras, las que todo el mundo llama retenciones, son los derechos de exportación: un impuesto que se aplica sobre lo que sale del país. Vos no exportás, así que no los pagás directamente, y sin embargo los sufrís entero: el exportador descuenta ese derecho del precio internacional para calcular lo que te puede pagar a vos. Por eso el precio local de un grano es menor que el internacional. No aparece como un gasto en tu planilla, aparece como un precio más bajo, que es la forma más difícil de ver un costo.",
+        "Las segundas son retenciones y percepciones impositivas: cuando cobrás una venta, el que te paga retiene una porción a cuenta de tus impuestos —IVA, Ganancias, Ingresos Brutos— y la deposita a tu nombre. Esas no son un impuesto adicional: son adelantos de impuestos que ibas a pagar igual, y se descuentan de lo que te toque pagar después.",
+        "La diferencia práctica es total. El derecho de exportación es plata que no volvés a ver: está incorporada al precio. La retención impositiva es plata tuya adelantada, que se computa o se recupera.",
+        "Y hay una consecuencia que conviene tener presente: como las retenciones impositivas adelantan pagos, en un año de resultado flojo podés terminar habiendo adelantado más impuesto del que correspondía, y eso se suma al saldo a favor que ya tenés de IVA. Otra vez, capital inmovilizado."
+      ],
+      "datos": [
+        { "clave": "Derechos de exportación", "valor": "impuesto sobre lo que sale del país" },
+        { "clave": "Cómo te llegan", "valor": "no los pagás vos: el exportador los descuenta del precio que te ofrece" },
+        { "clave": "Por qué cuesta verlos", "valor": "no aparecen como gasto, aparecen como precio más bajo" },
+        { "clave": "Retenciones impositivas", "valor": "adelantos de IVA, Ganancias o Ingresos Brutos que te descuentan al cobrar" },
+        { "clave": "La diferencia", "valor": "el derecho de exportación no vuelve; la retención impositiva se computa o se recupera" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué son los derechos de exportación y por qué te afectan si no exportás?", "r": "Un impuesto sobre lo que sale del país. El exportador lo descuenta del precio internacional para calcular lo que te paga, así que te llega como precio más bajo.", "tipo": "recordar" },
+        { "p": "¿Una retención impositiva es un impuesto extra?", "r": "No: es un adelanto de un impuesto que ibas a pagar igual, y se computa después.", "tipo": "recordar" },
+        { "p": "¿Por qué el derecho de exportación es el costo más difícil de ver?", "r": "Porque no aparece como un gasto en la planilla, aparece incorporado en un precio más bajo.", "tipo": "criterio" },
+        { "p": "En un año de resultado flojo, ¿qué pasa con las retenciones impositivas?", "r": "Que podés haber adelantado más impuesto del que correspondía, y eso engorda el saldo a favor.", "tipo": "criterio" }
+      ],
+      "relacionado": ["imp-iva-001", "imp-mapa-001", "agr-calidad-001"]
+    },
+
+    {
+      "id": "imp-iibb-001",
+      "area": "impositivo",
+      "tema": "provinciales",
+      "titulo": "Ingresos Brutos",
+      "zona": "entre_rios",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "el contador. Las alícuotas, las exenciones para producción primaria y los regímenes son provinciales y cambian: en Entre Ríos hay que mirar lo vigente ese año.",
+      "resumen": "Se calcula sobre lo que facturás, no sobre lo que ganás.",
+      "cuerpo": [
+        "Ingresos Brutos es un impuesto provincial que se calcula sobre la facturación, no sobre el resultado. Ésa es toda la idea y de ahí sale todo lo demás: si vendiste, pagás, hayas ganado o perdido.",
+        "Para una actividad como la agropecuaria, donde el margen es una fracción chica de lo facturado y donde hay años directamente malos, eso significa que el impuesto no acompaña el ciclo: en el peor año lo pagás igual, calculado sobre las mismas ventas.",
+        "Hay dos cosas más que conviene tener en el radar. La primera es que existen exenciones o tratamientos diferenciales para la producción primaria, que suelen depender de dónde se produce y dónde se vende. Cuáles aplican y con qué condiciones es de lo que más cambia, y es una pregunta concreta para el contador, no algo que se resuelva leyendo.",
+        "La segunda es el Convenio Multilateral. Si tu actividad se reparte entre más de una provincia —producís en una, vendés o tenés la administración en otra— la base imponible se distribuye entre las jurisdicciones según reglas propias. Es la fuente típica de complicación administrativa cuando alguien opera cruzando un límite provincial, cosa nada rara en la zona de ustedes.",
+        "La forma de pensarlo al presupuestar: Ingresos Brutos no es un costo del resultado, es un costo de facturar. Va en la misma columna mental que el flete, no en la de Ganancias."
+      ],
+      "datos": [
+        { "clave": "Sobre qué se calcula", "valor": "la facturación, no el resultado" },
+        { "clave": "Qué implica", "valor": "se paga aunque el año haya sido malo" },
+        { "clave": "Exenciones", "valor": "suele haber tratamientos especiales para producción primaria", "nota": "Cuáles aplican cambia por provincia y por año." },
+        { "clave": "Convenio Multilateral", "valor": "reparte la base entre provincias cuando la actividad cruza jurisdicciones" },
+        { "clave": "Cómo pensarlo", "valor": "es un costo de facturar, no del resultado" }
+      ],
+      "preguntas": [
+        { "p": "¿Sobre qué se calcula Ingresos Brutos?", "r": "Sobre la facturación, no sobre el resultado.", "tipo": "recordar" },
+        { "p": "¿Qué pasa con Ingresos Brutos en un año de pérdida?", "r": "Se paga igual: depende de lo que vendiste, no de lo que te quedó.", "tipo": "recordar" },
+        { "p": "¿Cuándo aparece el Convenio Multilateral?", "r": "Cuando la actividad se reparte entre más de una provincia, y hay que distribuir la base imponible.", "tipo": "recordar" },
+        { "p": "¿En qué columna mental conviene poner Ingresos Brutos?", "r": "En la de los costos de facturar, junto al flete, no en la de Ganancias.", "tipo": "criterio" }
+      ],
+      "relacionado": ["imp-mapa-001", "imp-inmobiliario-001"]
+    },
+
+    {
+      "id": "imp-inmobiliario-001",
+      "area": "impositivo",
+      "tema": "provinciales",
+      "titulo": "Inmobiliario Rural",
+      "zona": "entre_rios",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "el contador y la boleta: la valuación fiscal y la alícuota las fija la provincia y se actualizan",
+      "resumen": "Se paga por tener el campo, produzcas o no.",
+      "cuerpo": [
+        "El Inmobiliario Rural es un impuesto provincial que grava la tierra. No mira lo que produjiste ni lo que ganaste: mira la valuación fiscal del inmueble. Se paga por tenerlo.",
+        "Eso lo convierte, en términos económicos, en un costo fijo por hectárea, exactamente igual que la amortización de una máquina. Y como todo costo fijo, su peso por hectárea no cambia, pero su peso por tonelada producida sube cuando el año viene mal. En un año de rinde bajo, cada quintal carga más impuesto inmobiliario que en uno bueno.",
+        "La base es la valuación fiscal, que es un valor administrativo de la provincia y no necesariamente se parece al valor de mercado del campo. Cuando la provincia actualiza esas valuaciones, el impuesto se mueve para todos a la vez sin que haya cambiado nada del campo ni de la producción.",
+        "Un punto importante para no confundirse: en un campo alquilado, quién paga el inmobiliario depende de lo que diga el contrato. No es automático que lo pague el dueño, aunque sea lo más habitual. Es una de las cláusulas que conviene mirar cuando comparás dos alquileres que parecen iguales.",
+        "Al presupuestar conviene tratarlo como lo que es: un piso de costo por hectárea que existe antes de sembrar la primera semilla."
+      ],
+      "datos": [
+        { "clave": "Qué grava", "valor": "la tierra, por su valuación fiscal" },
+        { "clave": "De qué NO depende", "valor": "de lo que produzcas ni de lo que ganes" },
+        { "clave": "Qué tipo de costo es", "valor": "fijo por hectárea, como la amortización de una máquina" },
+        { "clave": "Cuándo pesa más", "valor": "en un año de rinde bajo: el mismo costo repartido en menos toneladas" },
+        { "clave": "En campo alquilado", "valor": "quién lo paga depende del contrato", "nota": "Conviene mirarlo al comparar alquileres." }
+      ],
+      "preguntas": [
+        { "p": "¿Sobre qué se calcula el Inmobiliario Rural?", "r": "Sobre la valuación fiscal de la tierra, no sobre lo que produce.", "tipo": "recordar" },
+        { "p": "¿Qué tipo de costo es, en términos económicos?", "r": "Un costo fijo por hectárea, como la amortización de una máquina.", "tipo": "recordar" },
+        { "p": "¿Por qué pesa más en un año malo?", "r": "Porque el mismo costo se reparte entre menos toneladas producidas.", "tipo": "criterio" },
+        { "p": "En un campo alquilado, ¿quién lo paga?", "r": "Depende del contrato. Es una cláusula a mirar cuando comparás dos alquileres.", "tipo": "criterio" }
+      ],
+      "relacionado": ["imp-iibb-001", "agr-arrendamiento-001", "agr-costos-001"]
+    },
+
+    {
+      "id": "imp-ganancias-001",
+      "area": "impositivo",
+      "tema": "nacionales",
+      "titulo": "Ganancias: el impuesto sobre lo que todavía no vendiste",
+      "zona": "general",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "el contador. Cómo se valúan las existencias, qué régimen les corresponde y cómo se arma el ejercicio es trabajo profesional, no algo para resolver por cuenta propia.",
+      "resumen": "En el agro el resultado incluye lo que tenés en el silo y en el campo, vendido o no.",
+      "cuerpo": [
+        "Ganancias grava el resultado del ejercicio: lo que quedó después de restarle a los ingresos los gastos y las amortizaciones. Hasta ahí es igual que en cualquier actividad.",
+        "Lo que tiene de propio el agro, y es lo más importante de esta ficha, es cómo entran las existencias. Al cierre del ejercicio, el grano que está en el silo y la hacienda que está en el campo forman parte del resultado aunque no los hayas vendido. Si terminás el año con más existencias que al empezar, ese aumento cuenta como resultado positivo.",
+        "La consecuencia es la que sorprende: podés tener que pagar impuesto sobre mercadería que todavía no cobraste. Es el caso clásico del productor que decide retener granos esperando mejor precio y se encuentra con una obligación impositiva sin haber tenido el ingreso correspondiente. No es un error del sistema: es la contracara de que el resultado se mide por lo producido y no sólo por lo cobrado.",
+        "De ahí que en el agro la decisión de vender o retener no sea sólo comercial. Tiene una pata impositiva y una financiera que a veces empujan en dirección contraria a la corazonada sobre el precio.",
+        "Dos cosas más que conviene saber que existen, sin meterse en detalle. Una: el ejercicio fiscal de una explotación agropecuaria no tiene por qué coincidir con el año calendario, y se suele hacer cerrar en un momento que tenga sentido productivo. Dos: cómo se valúan esas existencias tiene reglas específicas, distintas para granos y para hacienda, y ahí es donde el contador realmente gana su honorario."
+      ],
+      "datos": [
+        { "clave": "Qué grava", "valor": "el resultado del ejercicio" },
+        { "clave": "Lo propio del agro", "valor": "las existencias de granos y hacienda entran en el resultado aunque no se hayan vendido" },
+        { "clave": "La consecuencia", "valor": "podés deber impuesto sobre mercadería que todavía no cobraste" },
+        { "clave": "Qué implica al decidir", "valor": "retener grano no es sólo una apuesta al precio: tiene efecto impositivo y financiero" },
+        { "clave": "El ejercicio fiscal", "valor": "no tiene por qué coincidir con el año calendario" },
+        { "clave": "Valuación de existencias", "valor": "tiene reglas propias, distintas para granos y para hacienda" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué tienen de particular las existencias en Ganancias para el agro?", "r": "Que el grano en el silo y la hacienda en el campo forman parte del resultado aunque no se hayan vendido.", "tipo": "recordar" },
+        { "p": "¿Por qué podés deber impuesto sin haber cobrado?", "r": "Porque el resultado se mide por lo producido, y las existencias cuentan aunque estén sin vender.", "tipo": "criterio" },
+        { "p": "¿Por qué retener granos no es sólo una decisión comercial?", "r": "Porque tiene una pata impositiva y una financiera, que pueden empujar en contra de la apuesta al precio.", "tipo": "criterio" },
+        { "p": "¿El ejercicio fiscal de un campo coincide con el año calendario?", "r": "No necesariamente: se suele hacer cerrar en un momento que tenga sentido productivo.", "tipo": "recordar" }
+      ],
+      "relacionado": ["imp-mapa-001", "imp-iva-001", "gan-negocios-001"]
+    },
+
+    {
+      "id": "imp-condicion-001",
+      "area": "impositivo",
+      "tema": "nacionales",
+      "titulo": "Monotributo o responsable inscripto",
+      "zona": "general",
+      "confianza": "baja",
+      "volatilidad": "revisar_anual",
+      "verificado": false,
+      "verificar_con": "el contador. Los topes de facturación, las categorías y los requisitos se actualizan seguido, y la decisión depende de la escala y la estructura de cada uno.",
+      "resumen": "Lo simple sale caro cuando el IVA crédito de los insumos es grande.",
+      "cuerpo": [
+        "Hay dos formas básicas de estar inscripto frente al fisco nacional, y para una actividad agropecuaria la elección tiene una consecuencia que no es obvia.",
+        "El monotributo es un régimen simplificado: pagás una cuota fija mensual por categoría, que agrupa impuesto, jubilación y obra social, y te evitás buena parte de la carga administrativa. A cambio hay topes de facturación y otras condiciones que hay que cumplir para poder seguir adentro.",
+        "El responsable inscripto liquida IVA y Ganancias por separado, con la carga administrativa que eso implica: hay que facturar con IVA discriminado, presentar declaraciones periódicas y llevar el registro en serio.",
+        "Acá está el punto que importa y que conecta con el IVA: el monotributista no computa crédito fiscal. El IVA que pagó al comprar insumos es, para él, simplemente parte del costo. Y en el agro el IVA de los insumos es una cifra importante, porque se compra mucho y a alícuota alta. O sea que la simplicidad del monotributo se paga, literalmente, con todo ese crédito que se pierde.",
+        "Por eso la comparación no se hace mirando la cuota mensual, que siempre parece barata, sino sumando el IVA de insumos que dejarías de recuperar en un año. Cuando la escala crece, ese número suele dar vuelta la decisión. Cuál conviene en un caso concreto, y a partir de qué punto, es exactamente lo que hay que preguntarle al contador: depende de cuánto comprás, cuánto facturás y con qué estructura."
+      ],
+      "datos": [
+        { "clave": "Monotributo", "valor": "cuota fija mensual que agrupa impuesto, jubilación y obra social" },
+        { "clave": "Su límite", "valor": "topes de facturación y otras condiciones para permanecer" },
+        { "clave": "Responsable inscripto", "valor": "liquida IVA y Ganancias por separado, con más carga administrativa" },
+        { "clave": "La diferencia que pesa", "valor": "el monotributista no computa crédito fiscal de IVA" },
+        { "clave": "Por qué importa en el agro", "valor": "el IVA de los insumos es grande: se compra mucho y a alícuota alta" },
+        { "clave": "Cómo comparar", "valor": "no por la cuota mensual, sino por el IVA de insumos que dejarías de recuperar en un año" }
+      ],
+      "preguntas": [
+        { "p": "¿Qué agrupa la cuota del monotributo?", "r": "Impuesto, jubilación y obra social en un pago único mensual.", "tipo": "recordar" },
+        { "p": "¿Cuál es la desventaja del monotributo que más pesa en el agro?", "r": "Que no computa crédito fiscal: el IVA de los insumos pasa a ser costo puro.", "tipo": "recordar" },
+        { "p": "¿Cómo se compara correctamente una opción con la otra?", "r": "No por la cuota mensual, sino sumando el IVA de insumos que se dejaría de recuperar en un año.", "tipo": "criterio" },
+        { "p": "¿Por qué la simplicidad administrativa puede salir cara?", "r": "Porque en una actividad que compra mucho a alícuota alta, el crédito de IVA que se pierde supera largamente lo que se ahorra en trámites.", "tipo": "criterio" }
+      ],
+      "relacionado": ["imp-iva-001", "imp-mapa-001"]
+    }
+  ]
+}

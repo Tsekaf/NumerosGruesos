@@ -6,43 +6,73 @@
  * gris sobre gris en lo que hay que leer rapido.
  */
 
+/*
+ * Paleta: tonos naturales de tierra y campo, en un punto medio. Ni el negro
+ * del diseño original (cansa de noche y se ve pésimo al sol) ni blanco puro
+ * (encandila). El fondo es un lino cálido y las tarjetas un papel apenas más
+ * claro, que es el contraste justo para leer teoría un rato largo.
+ *
+ * Todos los colores de texto pasan 4.5:1 sobre su fondo; los de botón, 5:1.
+ */
 :root {
-  --bg: #0f1115;
-  --panel: #171a21;
-  --panel-alto: #1e222b;
-  --ink: #e7ebf0;
-  --muted: #98a2b3;
-  --line: #272b33;
+  --bg: #e3ded2;          /* lino cálido */
+  --panel: #f2eee4;       /* papel */
+  --panel-alto: #d5cfbf;  /* canaleta, barra de progreso */
+  --ink: #2f2d28;         /* gris cálido profundo */
+  --muted: #6b665a;
+  --line: #c9c2b1;
 
-  --ok: #3fb950;
-  --ok-tenue: rgba(63, 185, 80, .12);
-  --bad: #f85149;
-  --bad-tenue: rgba(248, 81, 73, .12);
-  --warn: #d29922;
-  --warn-tenue: rgba(210, 153, 34, .12);
-  --accent: #58a6ff;
+  --ok: #4a6b3f;
+  --ok-tenue: rgba(74, 107, 63, .14);
+  --bad: #9c3d33;
+  --bad-tenue: rgba(156, 61, 51, .13);
+  --warn: #8a6524;
+  --warn-tenue: rgba(138, 101, 36, .14);
+
+  --accent: #4f6b41;       /* verde natural */
+  --sobre-accent: #f5f2e9; /* texto sobre el verde */
 
   --radio: 12px;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;  /* mata el flash gris al tocar */
+  touch-action: manipulation;                /* mata el delay de 300ms del doble tap */
+}
 
-html, body { height: 100%; }
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;            /* Safari no agranda el texto al rotar */
+  text-size-adjust: 100%;
+}
+
+body { height: 100%; }
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  overscroll-behavior: none;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;                  /* el cuerpo de texto de iOS */
+  line-height: 1.55;
+  overscroll-behavior: none;   /* sin el rebote elástico al llegar al borde */
+}
+
+/* Los botones no son texto que se seleccione: mantener apretado uno en iOS
+   abría el menú de copiar/compartir en vez de sentirse como un botón. */
+button {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .app {
   max-width: 560px;
   margin: 0 auto;
+  /* 100% de <html> como base y dvh donde exista: en Safari de iPhone, 100vh
+     incluye la barra de direcciones y deja un tramo cortado abajo. */
   min-height: 100%;
+  min-height: 100dvh;
   padding: 0 16px calc(28px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
@@ -136,7 +166,7 @@ button { font-family: inherit; font-size: 1rem; }
   transition: filter .12s, background .12s;
 }
 
-.principal { background: var(--accent); color: #0b1220; border: 0; }
+.principal { background: var(--accent); color: var(--sobre-accent); border: 0; }
 .principal:active { filter: brightness(.9); }
 
 .secundario { background: transparent; color: var(--muted); border-color: var(--line); }
@@ -401,3 +431,169 @@ button { font-family: inherit; font-size: 1rem; }
   .pantalla.activa { animation: none; }
   .barra-item .relleno { transition: none; }
 }
+
+/* --- Ajuste de tiempo en la portada ----------------------------------- */
+
+.ajuste { margin-top: 26px; }
+
+.chips-tiempo {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.chips-tiempo button {
+  min-height: 38px;
+  padding: 0 12px;
+  background: var(--panel);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+.chips-tiempo button.sel {
+  background: var(--panel-alto);
+  color: var(--ink);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* Sin limite: la barra de reloj se esconde entera. */
+.reloj[hidden] { display: none; }
+
+/* --- Teoria: indice --------------------------------------------------- */
+
+.ficha-fila {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  min-height: 44px;              /* minimo tactil de iOS */
+}
+.ficha-fila:active { background: var(--panel-alto); }
+
+.ficha-titulo { display: block; font-weight: 600; margin-bottom: 3px; }
+.ficha-resumen { display: block; color: var(--muted); font-size: .92rem; }
+.ficha-pie { display: flex; gap: 8px; align-items: center; margin-top: 9px; flex-wrap: wrap; }
+.ficha-marca { font-size: .74rem; color: var(--muted); }
+
+/* Sellos de confianza: que se distingan sin leer, por color y por texto. */
+.sello {
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-radius: 999px;
+  padding: 3px 9px;
+  border: 1px solid;
+}
+.sello-ok    { color: var(--ok);   background: var(--ok-tenue);   border-color: var(--ok); }
+.sello-medio { color: var(--warn); background: var(--warn-tenue); border-color: var(--warn); }
+.sello-ojo   { color: var(--bad);  background: var(--bad-tenue);  border-color: var(--bad); }
+
+/* --- Teoria: la ficha ------------------------------------------------- */
+
+.ficha-cabecera { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+.titulo-ficha { font-size: 1.5rem; margin: 0 0 6px; line-height: 1.2; }
+.f-resumen { color: var(--muted); margin: 0 0 18px; font-size: 1rem; }
+
+.aviso {
+  background: var(--bad-tenue);
+  border: 1px solid var(--bad);
+  border-radius: var(--radio);
+  padding: 12px 14px;
+  font-size: .88rem;
+  margin-bottom: 18px;
+}
+
+.f-cuerpo p { margin: 0 0 15px; }
+.f-cuerpo p:last-child { margin-bottom: 0; }
+
+.formula {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  padding: 14px 16px;
+}
+.formula code {
+  display: block;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: .92rem;
+  margin-bottom: 8px;
+}
+.formula-ej {
+  color: var(--muted);
+  font-size: .88rem;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.dato-nota {
+  color: var(--bad);
+  font-size: .78rem;
+  padding: 0 0 9px;
+  margin-top: -4px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* --- Teoria: repaso ---------------------------------------------------- */
+
+.repaso-avance {
+  color: var(--muted);
+  font-size: .8rem;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.repaso-caja {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  padding: 20px 18px;
+  min-height: 190px;
+}
+
+.repaso-pregunta { font-size: 1.18rem; margin: 6px 0 0; line-height: 1.45; }
+
+.repaso-respuesta {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.repaso-respuesta p { margin: 4px 0 0; }
+
+.repaso-juicio { display: flex; gap: 10px; margin-top: 12px; }
+.repaso-juicio button { margin-top: 0; flex: 1; }
+
+.aviso .rotulo { color: var(--bad); margin-bottom: 4px; }
+.aviso p { margin: 0; }
+
+/* --- Repaso espaciado -------------------------------------------------- */
+
+.secundario.apagado { opacity: .55; }
+
+.repaso-origen {
+  color: var(--muted);
+  font-size: .78rem;
+  margin-top: 2px;
+}
+
+.repaso-fin {
+  background: var(--panel);
+  border: 1px solid var(--ok);
+  border-radius: var(--radio);
+  padding: 26px 20px;
+  text-align: center;
+}
+.repaso-fin-titulo { font-size: 1.6rem; font-weight: 700; color: var(--ok); }
+.repaso-fin-detalle { color: var(--muted); margin: 8px 0 0; font-size: .92rem; }
+.repaso-fin .principal { margin-top: 20px; }
